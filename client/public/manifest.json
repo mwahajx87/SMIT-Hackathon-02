@@ -1,0 +1,17 @@
+{
+  "name": "HCM Lite - Human Capital Management",
+  "short_name": "HCM Lite",
+  "description": "Smart, lightweight HR, Attendance, Payroll & Leave Management",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1F2A44",
+  "theme_color": "#12A087",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

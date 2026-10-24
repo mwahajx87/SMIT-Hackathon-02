@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #F5F7FA;
+  --surface: #FFFFFF;
+  --navy: #1F2A44;
+  --primary: #12A087;
+  --accent: #5B4FCF;
+  --warn: #E9962B;
+  --danger: #D64545;
+  --success: #2E9E5B;
+  --muted: #6B7385;
+  --border: #E3E7EE;
+}
+
+[data-theme="dark"] {
+  --bg: #0F172A;
+  --surface: #1E293B;
+  --navy: #F8FAFC;
+  --primary: #14B8A6;
+  --accent: #818CF8;
+  --warn: #FBBF24;
+  --danger: #F87171;
+  --success: #34D399;
+  --muted: #94A3B8;
+  --border: #334155;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg);
+  color: var(--navy);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Global utility support for dark mode surfaces & text */
+[data-theme="dark"] .bg-white {
+  background-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .bg-\[\#F5F7FA\] {
+  background-color: #0F172A !important;
+}
+[data-theme="dark"] .border-\[\#E3E7EE\],
+[data-theme="dark"] .border-gray-200 {
+  border-color: #334155 !important;
+}
+[data-theme="dark"] .text-\[\#1F2A44\] {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .text-\[\#6B7385\],
+[data-theme="dark"] .text-gray-500,
+[data-theme="dark"] .text-gray-600 {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .hover\:bg-gray-100:hover,
+[data-theme="dark"] .hover\:bg-slate-50:hover {
+  background-color: #334155 !important;
+}
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: #1E293B !important;
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
+}

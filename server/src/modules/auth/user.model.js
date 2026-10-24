@@ -1,0 +1,45 @@
+import mongoose from 'mongoose';
+
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+    passwordHash: {
+      type: String,
+      required: true
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ['admin', 'hr', 'employee']
+    },
+    employeeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employee',
+      default: null
+    },
+    isActive: {
+      type: Boolean,
+      default: true
+    },
+    mustChangePassword: {
+      type: Boolean,
+      default: false
+    },
+    lastLoginAt: {
+      type: Date,
+      default: null
+    }
+  },
+  {
+    timestamps: true,
+    versionKey: false
+  }
+);
+
+export const User = mongoose.model('User', userSchema);
