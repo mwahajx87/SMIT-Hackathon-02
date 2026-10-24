@@ -8,7 +8,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(5000),
   CLIENT_URL: z.string().default('http://localhost:5173'),
   MONGODB_URI: z.string().default('mongodb://127.0.0.1:27017/hcm_lite'),
-  JWT_SECRET: z.string().default(process.env.NODE_ENV === 'test' ? 'test_jwt_secret_key_1234567890' : ''),
+  JWT_SECRET: z.string().default(process.env.JWT_SECRET || 'hcm_lite_jwt_secret_key_1234567890'),
   JWT_EXPIRES_IN: z.string().default('8h'),
   BCRYPT_ROUNDS: z.coerce.number().default(10),
   COMPANY_NAME: z.string().optional(),
@@ -28,7 +28,7 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error('Invalid environment variables:', parsed.error.format());
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
     process.exit(1);
   }
 }
