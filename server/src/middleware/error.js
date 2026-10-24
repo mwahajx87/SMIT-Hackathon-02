@@ -37,7 +37,8 @@ export function errorHandler(err, req, res, next) {
   return res.status(500).json({
     error: {
       code: 'INTERNAL_SERVER_ERROR',
-      message: 'An unexpected error occurred. Please try again later.'
+      message: err.message || 'An unexpected error occurred. Please try again later.',
+      stack: process.env.NODE_ENV !== 'production' ? err.stack : undefined
     }
   });
 }

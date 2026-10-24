@@ -1,4 +1,4 @@
-const LIVE_API = 'https://smit-hackathon-02-server.vercel.app';
+const LIVE_API = 'https://smit-hackathon-02-kl52.vercel.app';
 const API_BASE = (import.meta.env.VITE_API_URL || LIVE_API).replace(/\/$/, '') + '/api';
 
 export async function apiRequest(endpoint, options = {}) {
