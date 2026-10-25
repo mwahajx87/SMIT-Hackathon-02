@@ -96,7 +96,6 @@ export function AppShell() {
     { label: 'Users and logins', to: '/users', icon: UserCheck, roles: ['admin'] },
     { label: 'Announcements', to: '/announcements', icon: Megaphone, roles: ['admin', 'hr', 'employee'] },
     { label: 'Audit log', to: '/audit', icon: ShieldAlert, roles: ['admin'] },
-    { label: 'App Guide (/intro)', to: '/intro', icon: BookOpen, roles: ['admin', 'hr', 'employee'] }
   ].filter((item) => item.roles.includes(role));
 
   return (
@@ -248,7 +247,7 @@ export function AppShell() {
 
         {/* Mobile menu drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[var(--surface)] border-b border-[var(--border)] p-4 space-y-1 transition-colors">
+          <div className="md:hidden sticky bg-[var(--surface)] border-b border-[var(--border)] p-4 space-y-1 transition-colors">
             {navLinks.map((item) => {
               const Icon = item.icon;
               return (

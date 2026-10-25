@@ -114,41 +114,6 @@ export function Login() {
               </div>
             </FormField>
 
-            {/* Quick-fill Pills for Evaluators */}
-            <div className="pt-1">
-              <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)] mb-1.5 font-medium">
-                <span className="flex items-center gap-1">
-                  <Key className="w-3 h-3 text-[var(--primary)]" /> Quick Fill Demo:
-                </span>
-                <Link to="/intro" className="text-[var(--primary)] hover:underline">
-                  Credentials Guide
-                </Link>
-              </div>
-              <div className="grid grid-cols-3 gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => handleFillDemo('wahajwahaj200@gmail.com', '12345678')}
-                  className="px-2 py-1.5 rounded-md text-[11px] font-semibold border border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer text-center"
-                >
-                  Admin
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleFillDemo('sarah@gmail.com', '12345678')}
-                  className="px-2 py-1.5 rounded-md text-[11px] font-semibold border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-colors cursor-pointer text-center"
-                >
-                  HR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleFillDemo('john@gmail.com', '12345678')}
-                  className="px-2 py-1.5 rounded-md text-[11px] font-semibold border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer text-center"
-                >
-                  Employee
-                </button>
-              </div>
-            </div>
-
             <Button type="submit" loading={loading} className="w-full h-10 mt-3">
               Sign in
             </Button>
