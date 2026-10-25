@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { User } from '../auth/user.model.js';
 import { Employee } from '../employees/employee.model.js';

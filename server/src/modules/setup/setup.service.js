@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { Settings } from '../org/settings.model.js';
 import { User } from '../auth/user.model.js';
