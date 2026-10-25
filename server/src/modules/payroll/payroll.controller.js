@@ -1,5 +1,4 @@
 import * as payrollService from './payroll.service.js';
-import { generatePayslipPdf } from './pdf.service.js';
 
 export async function createPayrollRun(req, res, next) {
   try {
@@ -60,6 +59,8 @@ export async function downloadPayslipPdf(req, res, next) {
     const { runId, employeeId } = req.params;
     const { run, payslip } = await payrollService.getSinglePayslip(runId, employeeId, req.ctx);
 
+    // Lazy-load pdfkit only when actually generating a PDF (avoids cold-start crash on Vercel)
+    const { generatePayslipPdf } = await import('./pdf.service.js');
     const pdfBuffer = await generatePayslipPdf({ run, item: payslip });
 
     res.setHeader('Content-Type', 'application/pdf');

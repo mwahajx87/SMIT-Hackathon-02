@@ -21,23 +21,10 @@ export function createApp() {
   const app = express();
 
   // CORS must come BEFORE helmet so preflight OPTIONS responses
-  // are not stripped of Access-Control headers
-  const allowedOrigins = env.CLIENT_URL
-    ? env.CLIENT_URL.split(',').map((o) => o.trim())
-    : [];
-
+  // are not stripped of Access-Control headers.
+  // Allow all origins — Vercel preview URLs change on every deployment.
   const corsOptions = {
-    origin: (origin, callback) => {
-      // Allow requests with no origin (curl, Postman, server-to-server)
-      if (!origin) return callback(null, true);
-      // If an explicit allow-list is configured, enforce it
-      if (allowedOrigins.length > 0) {
-        if (allowedOrigins.includes(origin)) return callback(null, true);
-        return callback(new Error(`CORS: origin ${origin} not allowed`));
-      }
-      // No allow-list → open API, permit every origin
-      return callback(null, true);
-    },
+    origin: (origin, callback) => callback(null, true),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
