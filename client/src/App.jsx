@@ -23,6 +23,7 @@ import { HrDashboard } from './features/dashboard/HrDashboard.jsx';
 import { EmployeeDashboard } from './features/dashboard/EmployeeDashboard.jsx';
 import { AnnouncementsScreen } from './features/comms/AnnouncementsScreen.jsx';
 import { AuditScreen } from './features/audit/AuditScreen.jsx';
+import { IntroScreen } from './features/intro/IntroScreen.jsx';
 import { Skeleton } from './components/ui/Skeleton.jsx';
 
 function DashboardRouter() {
@@ -116,6 +117,7 @@ export function App() {
     <AuthProvider>
       <HashRouter>
         <Routes>
+          <Route path="/intro" element={<IntroScreen />} />
           <Route path="/setup" element={<SetupScreen />} />
           <Route
             path="/login"

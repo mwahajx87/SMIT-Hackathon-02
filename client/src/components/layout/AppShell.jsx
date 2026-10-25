@@ -18,7 +18,8 @@ import {
   Menu,
   X,
   Sun,
-  Moon
+  Moon,
+  BookOpen
 } from 'lucide-react';
 import { AiChatDrawer } from '../../features/ai/AiChatDrawer.jsx';
 
@@ -94,7 +95,8 @@ export function AppShell() {
     { label: 'Organization', to: '/org', icon: Building, roles: ['admin', 'hr'] },
     { label: 'Users and logins', to: '/users', icon: UserCheck, roles: ['admin'] },
     { label: 'Announcements', to: '/announcements', icon: Megaphone, roles: ['admin', 'hr', 'employee'] },
-    { label: 'Audit log', to: '/audit', icon: ShieldAlert, roles: ['admin'] }
+    { label: 'Audit log', to: '/audit', icon: ShieldAlert, roles: ['admin'] },
+    { label: 'App Guide (/intro)', to: '/intro', icon: BookOpen, roles: ['admin', 'hr', 'employee'] }
   ].filter((item) => item.roles.includes(role));
 
   return (
