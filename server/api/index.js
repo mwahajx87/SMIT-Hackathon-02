@@ -18,7 +18,7 @@ async function init() {
     connectDB = dbMod.connectDB;
 
     const appMod = await import('../src/app.js');
-    appInstance = appMod.createApp();
+    appInstance = appMod.default || appMod.createApp();
   } catch (err) {
     initError = err;
     throw err;

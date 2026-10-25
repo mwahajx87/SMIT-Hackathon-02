@@ -38,6 +38,28 @@ export function createApp() {
   app.use(helmet());
   app.use(express.json({ limit: '2mb' }));
 
+  // Ensure DB is connected for serverless invocations
+  app.use(async (req, res, next) => {
+    try {
+      if (process.env.NODE_ENV !== 'test') {
+        const mongoose = (await import('mongoose')).default;
+        if (mongoose.connection.readyState !== 1) {
+          const { connectDB } = await import('./config/db.js');
+          await connectDB();
+        }
+      }
+      next();
+    } catch (err) {
+      console.error('[DB Middleware] Connection failed:', err);
+      return res.status(500).json({
+        error: {
+          code: 'DB_CONNECTION_FAILED',
+          message: err.message
+        }
+      });
+    }
+  });
+
   // Root & Health endpoints
   app.get('/', (req, res) => {
     res.json({
@@ -78,3 +100,6 @@ export function createApp() {
 
   return app;
 }
+
+const app = createApp();
+export default app;
