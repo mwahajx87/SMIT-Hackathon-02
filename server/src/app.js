@@ -20,26 +20,35 @@ import { aiRoutes } from './modules/ai/ai.routes.js';
 export function createApp() {
   const app = express();
 
-  // Security & parsing
-  app.use(helmet());
+  // CORS must come BEFORE helmet so preflight OPTIONS responses
+  // are not stripped of Access-Control headers
   const allowedOrigins = env.CLIENT_URL
     ? env.CLIENT_URL.split(',').map((o) => o.trim())
     : [];
 
-  app.use(cors({
+  const corsOptions = {
     origin: (origin, callback) => {
-      // Allow requests with no origin (curl, mobile apps, server-to-server)
+      // Allow requests with no origin (curl, Postman, server-to-server)
       if (!origin) return callback(null, true);
-      // If a specific allow-list is configured, enforce it
+      // If an explicit allow-list is configured, enforce it
       if (allowedOrigins.length > 0) {
         if (allowedOrigins.includes(origin)) return callback(null, true);
         return callback(new Error(`CORS: origin ${origin} not allowed`));
       }
-      // No allow-list configured → permit every origin (development / open API)
+      // No allow-list → open API, permit every origin
       return callback(null, true);
     },
-    credentials: true
-  }));
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+
+  app.use(cors(corsOptions));
+  // Respond immediately to every OPTIONS preflight before any other middleware
+  app.options('*', cors(corsOptions));
+
+  // Security headers (after CORS so they don't strip CORS headers)
+  app.use(helmet());
   app.use(express.json({ limit: '2mb' }));
 
   // Root & Health endpoints
