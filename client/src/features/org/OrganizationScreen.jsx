@@ -159,28 +159,28 @@ export function OrganizationScreen() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-[#1F2A44]">Organization Setup</h1>
-        <p className="text-xs text-[#6B7385] mt-1">
-          Configure work rules, office location, departments, designations, leave types, and holidays.
+        <h1 className="text-2xl font-semibold text-[var(--text)] leading-8">Organization</h1>
+        <p className="text-xs text-[var(--text-muted)] mt-1">
+          Configure company rules, geofence, departments, designations, leave types, and holidays.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#E3E7EE] gap-6 text-sm font-medium">
+      <div className="flex border-b border-[var(--border)] gap-6 text-sm font-medium">
         {[
-          { id: 'rules', label: 'Company & Rules' },
+          { id: 'rules', label: 'Company & rules' },
           { id: 'departments', label: 'Departments' },
           { id: 'designations', label: 'Designations' },
-          { id: 'leave', label: 'Leave Types' },
-          { id: 'holidays', label: 'Public Holidays' }
+          { id: 'leave', label: 'Leave types' },
+          { id: 'holidays', label: 'Public holidays' }
         ].map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`pb-3 transition-colors border-b-2 font-medium ${
+            className={`pb-3 transition-colors border-b-2 font-medium cursor-pointer ${
               tab === t.id
-                ? 'border-[#12A087] text-[#12A087]'
-                : 'border-transparent text-[#6B7385] hover:text-[#1F2A44]'
+                ? 'border-[var(--primary)] text-[var(--primary)]'
+                : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text)]'
             }`}
           >
             {t.label}
@@ -190,111 +190,124 @@ export function OrganizationScreen() {
 
       {/* Rules Tab */}
       {tab === 'rules' && settings && (
-        <Card title="Working Hours & Geofence Settings">
+        <Card title="Working hours and geofence">
           {statusMessage && (
-            <div className="mb-4 p-3 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium">
+            <div className="mb-4 p-3 bg-[var(--success-soft)] text-[var(--success)] border border-[var(--success)]/20 rounded-lg text-xs font-medium">
               {statusMessage}
             </div>
           )}
           <form onSubmit={handleSaveSettings} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField label="Office Start Time" helperText="Default 09:00">
+              <FormField label="Office start time" helperText="Default 09:00">
                 <input
                   type="time"
                   value={settings.officeStart || '09:00'}
                   onChange={(e) => setSettings({ ...settings, officeStart: e.target.value })}
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Grace Period (Minutes)" helperText="Late after this (Default 15 min)">
+              <FormField label="Grace period (minutes)" helperText="Late after this (Default 15 min)">
                 <input
                   type="number"
                   value={settings.graceMinutes ?? 15}
                   onChange={(e) => setSettings({ ...settings, graceMinutes: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Half Day Threshold (Hours)" helperText="Worked under this = half day (Default 5h)">
+              <FormField label="Half day threshold (hours)" helperText="Worked under this = half day (Default 5h)">
                 <input
                   type="number"
+                  step="0.5"
                   value={settings.halfDayHours ?? 5}
                   onChange={(e) => setSettings({ ...settings, halfDayHours: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
+              <FormField label="Minimum full day (hours)" helperText="Default 8h">
+                <input
+                  type="number"
+                  step="0.5"
+                  value={settings.fullDayHours ?? 8}
+                  onChange={(e) => setSettings({ ...settings, fullDayHours: Number(e.target.value) })}
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                />
+              </FormField>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField label="Timezone">
                 <input
                   type="text"
                   value={settings.timezone || 'Asia/Karachi'}
                   onChange={(e) => setSettings({ ...settings, timezone: e.target.value })}
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Office Latitude">
+              <FormField label="Office latitude">
                 <input
                   type="number"
                   step="any"
                   value={settings.officeLat || ''}
                   onChange={(e) => setSettings({ ...settings, officeLat: e.target.value ? Number(e.target.value) : null })}
                   placeholder="24.8607"
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Office Longitude">
+              <FormField label="Office longitude">
                 <input
                   type="number"
                   step="any"
                   value={settings.officeLng || ''}
                   onChange={(e) => setSettings({ ...settings, officeLng: e.target.value ? Number(e.target.value) : null })}
                   placeholder="67.0011"
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Office Radius (Meters)" helperText="Default 150m">
+              <FormField label="Office radius (meters)" helperText="Default 150m">
                 <input
                   type="number"
                   value={settings.officeRadiusM ?? 150}
                   onChange={(e) => setSettings({ ...settings, officeRadiusM: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
               <div className="flex items-end pb-1.5">
                 <Button type="button" variant="secondary" onClick={handleUseLocation} className="w-full">
                   <MapPin className="w-4 h-4 mr-1.5" />
-                  Use My Current Location
+                  Use my current location
                 </Button>
               </div>
             </div>
 
             {/* Late Penalty Rule (Phase 10 T10.2) */}
-            <div className="p-4 bg-amber-50/50 rounded-xl border border-amber-200/60 flex items-start gap-3">
+            <div className="p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200/60 dark:border-amber-800/30 flex items-start gap-3">
               <input
                 type="checkbox"
                 id="latePenaltyToggle"
                 checked={Boolean(settings.latePenaltyEnabled)}
                 onChange={(e) => setSettings({ ...settings, latePenaltyEnabled: e.target.checked })}
-                className="mt-1 h-4 w-4 text-[#12A087] rounded border-gray-300 focus:ring-[#12A087]"
+                className="mt-1 h-4 w-4 text-[var(--primary)] rounded border-[var(--border)] focus:ring-[var(--primary)]"
               />
               <label htmlFor="latePenaltyToggle" className="cursor-pointer text-sm">
-                <span className="font-semibold text-[#1F2A44] block">
-                  Enable Late Penalty Rule (3 lates = 0.5 day deduction)
+                <span className="font-semibold text-[var(--text)] block">
+                  Enable late penalty rule (3 lates = 0.5 day deduction)
                 </span>
-                <span className="text-xs text-[#6B7385] block mt-0.5">
+                <span className="text-xs text-[var(--text-muted)] block mt-0.5">
                   When enabled, every 3 late arrivals in a payroll month automatically add 0.5 days to the employee&apos;s payroll deductions.
                 </span>
               </label>
             </div>
 
-            <div className="pt-4 border-t border-[#E3E7EE] flex justify-end">
+            <div className="pt-4 border-t border-[var(--border)] flex justify-end">
               <Button type="submit" loading={saving}>
-                Save Rules
+                Save rules
               </Button>
             </div>
           </form>
@@ -304,15 +317,15 @@ export function OrganizationScreen() {
       {/* Departments Tab */}
       {tab === 'departments' && (
         <div className="space-y-4">
-          <Card title="Add Department">
+          <Card title="Add department">
             <form onSubmit={handleCreateDept} className="flex flex-col md:flex-row gap-3">
               <input
                 type="text"
-                placeholder="Department Name (e.g. Engineering)"
+                placeholder="Department name (e.g. Engineering)"
                 value={deptName}
                 onChange={(e) => setDeptName(e.target.value)}
                 required
-                className="flex-1 px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="flex-1 px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
               <input
                 type="text"
@@ -320,7 +333,7 @@ export function OrganizationScreen() {
                 value={deptCode}
                 onChange={(e) => setDeptCode(e.target.value)}
                 required
-                className="w-32 px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-32 px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
               <Button type="submit">
                 <Plus className="w-4 h-4 mr-1" /> Add
@@ -337,7 +350,7 @@ export function OrganizationScreen() {
                 cell: (row) => (
                   <button
                     onClick={() => handleDeleteDept(row._id)}
-                    className="text-[#D64545] hover:text-red-700 p-1"
+                    className="text-[var(--danger)] hover:text-red-700 p-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -355,7 +368,7 @@ export function OrganizationScreen() {
       {/* Designations Tab */}
       {tab === 'designations' && (
         <div className="space-y-4">
-          <Card title="Add Designation">
+          <Card title="Add designation">
             <form onSubmit={handleCreateDesig} className="flex gap-3">
               <input
                 type="text"
@@ -363,7 +376,7 @@ export function OrganizationScreen() {
                 value={desigTitle}
                 onChange={(e) => setDesigTitle(e.target.value)}
                 required
-                className="flex-1 px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="flex-1 px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
               <Button type="submit">
                 <Plus className="w-4 h-4 mr-1" /> Add
@@ -379,7 +392,7 @@ export function OrganizationScreen() {
                 cell: (row) => (
                   <button
                     onClick={() => handleDeleteDesig(row._id)}
-                    className="text-[#D64545] hover:text-red-700 p-1"
+                    className="text-[var(--danger)] hover:text-red-700 p-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -401,7 +414,7 @@ export function OrganizationScreen() {
             { header: 'Key', accessorKey: 'key' },
             { header: 'Name', accessorKey: 'name' },
             {
-              header: 'Yearly Quota',
+              header: 'Yearly quota',
               cell: (row) => (row.yearlyQuota === null ? 'Unlimited' : `${row.yearlyQuota} days`)
             },
             {
@@ -417,25 +430,25 @@ export function OrganizationScreen() {
       {/* Holidays Tab */}
       {tab === 'holidays' && (
         <div className="space-y-4">
-          <Card title="Add Public Holiday">
+          <Card title="Add public holiday">
             <form onSubmit={handleCreateHoliday} className="flex flex-col md:flex-row gap-3">
               <input
                 type="date"
                 value={holidayDate}
                 onChange={(e) => setHolidayDate(e.target.value)}
                 required
-                className="px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
               <input
                 type="text"
-                placeholder="Holiday Name (e.g. Independence Day)"
+                placeholder="Holiday name (e.g. Independence Day)"
                 value={holidayName}
                 onChange={(e) => setHolidayName(e.target.value)}
                 required
-                className="flex-1 px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="flex-1 px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
               <Button type="submit">
-                <Plus className="w-4 h-4 mr-1" /> Add Holiday
+                <Plus className="w-4 h-4 mr-1" /> Add holiday
               </Button>
             </form>
           </Card>
@@ -443,13 +456,13 @@ export function OrganizationScreen() {
           <DataTable
             columns={[
               { header: 'Date', accessorKey: 'date' },
-              { header: 'Holiday Name', accessorKey: 'name' },
+              { header: 'Holiday name', accessorKey: 'name' },
               {
                 header: 'Actions',
                 cell: (row) => (
                   <button
                     onClick={() => handleDeleteHoliday(row._id)}
-                    className="text-[#D64545] hover:text-red-700 p-1"
+                    className="text-[var(--danger)] hover:text-red-700 p-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

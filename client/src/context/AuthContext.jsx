@@ -5,15 +5,21 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('hcm_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('hcm_user');
+      if (!saved || saved === 'undefined' || saved === 'null') return null;
+      return JSON.parse(saved);
+    } catch (e) {
+      localStorage.removeItem('hcm_user');
+      return null;
+    }
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadUser() {
       const token = localStorage.getItem('hcm_token');
-      if (token) {
+      if (token && token !== 'undefined') {
         try {
           const profile = await apiRequest('/auth/me');
           setUser(profile);
@@ -53,9 +59,16 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const updateUser = (updated) => {
-    setUser(updated);
-    localStorage.setItem('hcm_user', JSON.stringify(updated));
+  const updateUser = (updater) => {
+    setUser((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      if (next) {
+        localStorage.setItem('hcm_user', JSON.stringify(next));
+      } else {
+        localStorage.removeItem('hcm_user');
+      }
+      return next;
+    });
   };
 
   return (

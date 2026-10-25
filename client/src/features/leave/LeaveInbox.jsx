@@ -6,7 +6,7 @@ import { Modal } from '../../components/ui/Modal.jsx';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';
 import { apiRequest } from '../../lib/api.js';
-import { CheckCircle2, XCircle, AlertCircle, RefreshCw, Calendar } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 
 export function LeaveInbox() {
   const [requests, setRequests] = useState([]);
@@ -73,26 +73,26 @@ export function LeaveInbox() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2A44]">Leave Inbox</h1>
-          <p className="text-sm text-[#6B7385]">Review and decide on pending employee leave applications</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">Leave inbox</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Review and decide on pending employee leave applications</p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchInbox} className="flex items-center gap-2">
+        <Button variant="secondary" size="sm" onClick={fetchInbox} className="flex items-center gap-2">
           <RefreshCw className="w-4 h-4" />
           <span>Refresh</span>
         </Button>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+        <div className="p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-rose-600 dark:text-rose-400 text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       <Card className="overflow-hidden">
-        <div className="p-4 border-b border-[#E3E7EE] flex items-center justify-between">
-          <h2 className="text-base font-bold text-[#1F2A44]">
-            Pending Approvals ({requests.length})
+        <div className="p-4 border-b border-[var(--border)] flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-[var(--text)]">
+            Pending approvals ({requests.length})
           </h2>
         </div>
 
@@ -112,35 +112,35 @@ export function LeaveInbox() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-[#F8FAFC] text-[#6B7385] text-xs uppercase font-medium border-b border-[#E3E7EE]">
+              <thead className="bg-[var(--surface-muted)] text-[var(--text-muted)] text-xs font-medium border-b border-[var(--border)]">
                 <tr>
                   <th className="px-5 py-3">Employee</th>
-                  <th className="px-5 py-3">Leave Type</th>
+                  <th className="px-5 py-3">Leave type</th>
                   <th className="px-5 py-3">Dates</th>
-                  <th className="px-5 py-3">Working Days</th>
+                  <th className="px-5 py-3">Working days</th>
                   <th className="px-5 py-3">Reason</th>
                   <th className="px-5 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E3E7EE]">
+              <tbody className="divide-y divide-[var(--border)] text-[var(--text)]">
                 {requests.map((req) => (
-                  <tr key={req._id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={req._id} className="hover:bg-[var(--surface-muted)]/50 transition-colors">
                     <td className="px-5 py-4">
-                      <div className="font-semibold text-[#1F2A44]">{req.employeeId?.name || 'Unknown'}</div>
-                      <div className="text-xs text-[#6B7385]">
+                      <div className="font-medium text-[var(--text)]">{req.employeeId?.name || 'Unknown'}</div>
+                      <div className="text-xs text-[var(--text-muted)]">
                         {req.employeeId?.code} • {req.employeeId?.departmentId?.name || 'No Dept'}
                       </div>
                     </td>
-                    <td className="px-5 py-4 capitalize font-medium text-[#1F2A44]">
+                    <td className="px-5 py-4 capitalize font-medium text-[var(--text)]">
                       {req.leaveType}
                     </td>
-                    <td className="px-5 py-4 text-[#1F2A44] whitespace-nowrap">
+                    <td className="px-5 py-4 font-mono text-xs tabular-nums text-[var(--text)] whitespace-nowrap">
                       {req.startDate} → {req.endDate}
                     </td>
-                    <td className="px-5 py-4 text-[#1F2A44] font-semibold">
+                    <td className="px-5 py-4 font-mono text-xs tabular-nums text-[var(--text)] font-medium">
                       {req.workingDays} {req.workingDays === 1 ? 'day' : 'days'}
                     </td>
-                    <td className="px-5 py-4 text-[#6B7385] max-w-xs truncate" title={req.reason}>
+                    <td className="px-5 py-4 text-[var(--text-muted)] text-xs max-w-xs truncate" title={req.reason}>
                       {req.reason}
                     </td>
                     <td className="px-5 py-4 text-right">
@@ -149,7 +149,7 @@ export function LeaveInbox() {
                           variant="ghost"
                           size="sm"
                           onClick={() => openDecisionModal(req, 'approved')}
-                          className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-2.5 py-1 text-xs"
+                          className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 px-2.5 py-1 text-xs"
                         >
                           <CheckCircle2 className="w-4 h-4 mr-1" />
                           Approve
@@ -158,7 +158,7 @@ export function LeaveInbox() {
                           variant="ghost"
                           size="sm"
                           onClick={() => openDecisionModal(req, 'rejected')}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2.5 py-1 text-xs"
+                          className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/30 px-2.5 py-1 text-xs"
                         >
                           <XCircle className="w-4 h-4 mr-1" />
                           Reject
@@ -177,37 +177,37 @@ export function LeaveInbox() {
       <Modal
         isOpen={Boolean(activeRequest)}
         onClose={() => setActiveRequest(null)}
-        title={decisionType === 'approved' ? 'Approve Leave Request' : 'Reject Leave Request'}
+        title={decisionType === 'approved' ? 'Approve leave request' : 'Reject leave request'}
       >
         <form onSubmit={handleDecision} className="space-y-4">
           {decisionError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded text-red-600 text-xs">
+            <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-rose-600 dark:text-rose-400 text-xs">
               {decisionError}
             </div>
           )}
 
           {activeRequest && (
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded text-xs space-y-1 text-[#1F2A44]">
-              <div><strong>Applicant:</strong> {activeRequest.employeeId?.name} ({activeRequest.employeeId?.code})</div>
-              <div><strong>Type:</strong> <span className="capitalize">{activeRequest.leaveType}</span></div>
-              <div><strong>Duration:</strong> {activeRequest.startDate} to {activeRequest.endDate} ({activeRequest.workingDays} working days)</div>
-              <div><strong>Reason:</strong> {activeRequest.reason}</div>
+            <div className="p-3.5 bg-[var(--surface-muted)] border border-[var(--border)] rounded-lg text-xs space-y-1 text-[var(--text)]">
+              <div><strong className="text-[var(--text-muted)]">Applicant:</strong> {activeRequest.employeeId?.name} ({activeRequest.employeeId?.code})</div>
+              <div><strong className="text-[var(--text-muted)]">Type:</strong> <span className="capitalize">{activeRequest.leaveType}</span></div>
+              <div><strong className="text-[var(--text-muted)]">Duration:</strong> {activeRequest.startDate} to {activeRequest.endDate} ({activeRequest.workingDays} working days)</div>
+              <div><strong className="text-[var(--text-muted)]">Reason:</strong> {activeRequest.reason}</div>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-[#1F2A44] uppercase mb-1">
-              Decision Comment <span className="text-red-500">*</span>
+            <label className="block text-xs font-medium text-[var(--text)] mb-1">
+              Decision comment <span className="text-[var(--text-muted)]">(required)</span>
             </label>
             <textarea
               required
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder={decisionType === 'approved' ? 'e.g., Approved, please arrange handover' : 'e.g., Rejected due to staffing requirements during this period'}
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+              placeholder={decisionType === 'approved' ? 'e.g. Approved, please coordinate coverage' : 'e.g. Declined due to scheduled project deliverables'}
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
-            <p className="text-[11px] text-[#6B7385] mt-1">
+            <p className="text-xs text-[var(--text-muted)] mt-1.5">
               A written comment is required for all approvals and rejections.
             </p>
           </div>
@@ -215,7 +215,7 @@ export function LeaveInbox() {
           <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={() => setActiveRequest(null)}
               disabled={submitting}
             >
@@ -223,10 +223,10 @@ export function LeaveInbox() {
             </Button>
             <Button
               type="submit"
+              variant={decisionType === 'approved' ? 'primary' : 'danger'}
               disabled={submitting || !comment.trim()}
-              className={decisionType === 'rejected' ? 'bg-red-600 hover:bg-red-700 text-white' : ''}
             >
-              {submitting ? 'Submitting...' : decisionType === 'approved' ? 'Confirm Approval' : 'Confirm Rejection'}
+              {submitting ? 'Submitting...' : decisionType === 'approved' ? 'Confirm approval' : 'Confirm rejection'}
             </Button>
           </div>
         </form>

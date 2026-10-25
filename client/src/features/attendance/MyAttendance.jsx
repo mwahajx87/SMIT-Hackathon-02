@@ -49,21 +49,22 @@ export function MyAttendance() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-[#1F2A44]">My Attendance</h1>
-          <p className="text-xs text-[#6B7385] mt-1">
-            View your monthly check-in history, hours worked, and track correction requests.
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">My attendance</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
+            View your monthly check-in history, hours worked, and track correction requests
           </p>
         </div>
-        <Button onClick={() => setIsCorrectionOpen(true)}>
-          <PlusCircle className="w-4 h-4 mr-1.5" /> Request Correction
+        <Button onClick={() => setIsCorrectionOpen(true)} className="flex items-center gap-2">
+          <PlusCircle className="w-4 h-4" />
+          <span>Request correction</span>
         </Button>
       </div>
 
       {/* Month Navigator */}
-      <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-[#E3E7EE]">
-        <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-[#12A087]" />
-          <span className="font-semibold text-[#1F2A44]">{currentMonth}</span>
+      <div className="flex items-center justify-between bg-[var(--surface)] p-4 rounded-xl border border-[var(--border)]">
+        <div className="flex items-center gap-2.5">
+          <Calendar className="w-5 h-5 text-[var(--primary)]" />
+          <span className="font-medium text-[var(--text)] font-mono tabular-nums">{currentMonth}</span>
         </div>
         <div className="flex gap-2">
           <Button size="sm" variant="secondary" onClick={handlePrevMonth}>
@@ -76,17 +77,17 @@ export function MyAttendance() {
       </div>
 
       {/* Attendance History List */}
-      <Card title="Attendance Records for Month">
+      <Card title="Attendance records for month" className="overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-xs text-[#6B7385]">Loading attendance...</div>
+          <div className="p-8 text-center text-xs text-[var(--text-muted)]">Loading attendance...</div>
         ) : records.length === 0 ? (
-          <div className="p-8 text-center text-xs text-[#6B7385]">
+          <div className="p-8 text-center text-xs text-[var(--text-muted)]">
             No attendance records recorded for this month.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-[#E3E7EE] text-left text-sm">
-              <thead className="bg-gray-50 text-xs font-semibold text-[#6B7385]">
+            <table className="min-w-full divide-y divide-[var(--border)] text-left text-sm">
+              <thead className="bg-[var(--surface-muted)] text-xs font-medium text-[var(--text-muted)]">
                 <tr>
                   <th className="px-4 py-3">Date</th>
                   <th className="px-4 py-3">Check-in</th>
@@ -96,25 +97,25 @@ export function MyAttendance() {
                   <th className="px-4 py-3">Source</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E3E7EE] text-[#1F2A44]">
+              <tbody className="divide-y divide-[var(--border)] text-[var(--text)]">
                 {records.map((r) => (
-                  <tr key={r._id} className="hover:bg-gray-50/50">
-                    <td className="px-4 py-3 font-medium">{r.date}</td>
-                    <td className="px-4 py-3 font-mono text-xs">
+                  <tr key={r._id} className="hover:bg-[var(--surface-muted)]/50 transition-colors">
+                    <td className="px-4 py-3 font-medium font-mono tabular-nums">{r.date}</td>
+                    <td className="px-4 py-3 font-mono text-xs tabular-nums">
                       {new Date(r.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs">
+                    <td className="px-4 py-3 font-mono text-xs tabular-nums">
                       {r.checkOutAt
                         ? new Date(r.checkOutAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                        : '-'}
+                        : '—'}
                     </td>
-                    <td className="px-4 py-3 text-xs">
-                      {r.workedMinutes ? `${Math.floor(r.workedMinutes / 60)}h ${r.workedMinutes % 60}m` : '-'}
+                    <td className="px-4 py-3 text-xs font-mono tabular-nums">
+                      {r.workedMinutes ? `${Math.floor(rowWorked(r.workedMinutes))}h ${r.workedMinutes % 60}m` : '—'}
                     </td>
                     <td className="px-4 py-3">
                       <StatusBadge status={r.status} />
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#6B7385] capitalize">{r.source}</td>
+                    <td className="px-4 py-3 text-xs text-[var(--text-muted)] capitalize">{r.source}</td>
                   </tr>
                 ))}
               </tbody>
@@ -124,24 +125,24 @@ export function MyAttendance() {
       </Card>
 
       {/* Corrections Requests Section */}
-      <Card title="My Correction Requests">
+      <Card title="My correction requests">
         {corrections.length === 0 ? (
-          <p className="text-xs text-[#6B7385]">No correction requests submitted.</p>
+          <p className="text-xs text-[var(--text-muted)]">No correction requests submitted.</p>
         ) : (
-          <div className="divide-y divide-[#E3E7EE]">
+          <div className="divide-y divide-[var(--border)]">
             {corrections.map((c) => (
-              <div key={c._id} className="py-3 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
+              <div key={c._id} className="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
                 <div>
-                  <span className="font-semibold text-sm text-[#1F2A44] mr-2">{c.date}</span>
-                  <span className="text-[#6B7385]">
+                  <span className="font-semibold text-sm text-[var(--text)] mr-2 font-mono tabular-nums">{c.date}</span>
+                  <span className="text-[var(--text-muted)] font-mono tabular-nums">
                     Times: {c.requestedCheckIn || '--:--'} to {c.requestedCheckOut || '--:--'}
                   </span>
-                  <p className="text-[#6B7385] mt-0.5">Reason: {c.reason}</p>
+                  <p className="text-[var(--text-muted)] mt-1">Reason: {c.reason}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <StatusBadge status={c.status} />
                   {c.decisionComment && (
-                    <span className="text-gray-400 italic">"{c.decisionComment}"</span>
+                    <span className="text-[var(--text-muted)] italic">"{c.decisionComment}"</span>
                   )}
                 </div>
               </div>
@@ -157,4 +158,8 @@ export function MyAttendance() {
       />
     </div>
   );
+}
+
+function rowWorked(mins) {
+  return Math.floor(mins / 60);
 }

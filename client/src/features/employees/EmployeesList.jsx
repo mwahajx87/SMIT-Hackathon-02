@@ -126,41 +126,41 @@ export function EmployeesList() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-[#1F2A44]">Employee Directory</h1>
-          <p className="text-xs text-[#6B7385] mt-1">
-            Search, filter, manage employee profiles and view 360 histories.
+          <h1 className="text-2xl font-semibold text-[var(--text)] leading-8">Employees</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">
+            Manage everyone in your company.
           </p>
         </div>
 
         {isHr && (
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="secondary" onClick={() => setIsCsvModalOpen(true)}>
-              <Upload className="w-4 h-4 mr-1.5" /> Import CSV
+            <Button variant="secondary" size="sm" onClick={() => setIsCsvModalOpen(true)} className="h-9">
+              <Upload className="w-4 h-4 mr-1.5 stroke-[1.75]" /> Import CSV
             </Button>
-            <Button variant="secondary" onClick={handleExportCsv}>
-              <Download className="w-4 h-4 mr-1.5" /> Export CSV
+            <Button variant="secondary" size="sm" onClick={handleExportCsv} className="h-9">
+              <Download className="w-4 h-4 mr-1.5 stroke-[1.75]" /> Export CSV
             </Button>
-            <Button onClick={() => setIsAddModalOpen(true)}>
-              <UserPlus className="w-4 h-4 mr-1.5" /> Add Employee
+            <Button size="sm" onClick={() => setIsAddModalOpen(true)} className="h-9">
+              <UserPlus className="w-4 h-4 mr-1.5 stroke-[1.75]" /> Add employee
             </Button>
           </div>
         )}
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col md:flex-row gap-3 bg-white p-4 rounded-xl border border-[#E3E7EE]">
+      <div className="flex flex-col md:flex-row gap-3 bg-[var(--surface)] p-3.5 rounded-xl border border-[var(--border)] transition-colors">
         <div className="relative flex-1">
           <input
             type="text"
-            placeholder="Search by name, email, or employee code..."
+            placeholder="Search by name, code or email..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-full pl-9 pr-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+            className="w-full pl-9 pr-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           />
-          <Search className="w-4 h-4 text-[#6B7385] absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-2.5 stroke-[1.75]" />
         </div>
 
         <select
@@ -169,9 +169,9 @@ export function EmployeesList() {
             setSelectedDept(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+          className="px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
         >
-          <option value="">All Departments</option>
+          <option value="">All departments</option>
           {departments.map((d) => (
             <option key={d._id} value={d._id}>
               {d.name}
@@ -185,9 +185,9 @@ export function EmployeesList() {
             setSelectedStatus(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+          className="px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
         >
-          <option value="">All Statuses</option>
+          <option value="">All statuses</option>
           <option value="active">Active</option>
           <option value="probation">Probation</option>
           <option value="inactive">Inactive</option>
@@ -197,18 +197,22 @@ export function EmployeesList() {
 
       {/* Employee Table */}
       <DataTable
+        emptyTitle="No employees yet"
+        emptyDescription="Add your first employee to create their login."
+        emptyActionLabel={isHr ? "Add employee" : undefined}
+        onEmptyAction={isHr ? () => setIsAddModalOpen(true) : undefined}
         columns={[
           {
             header: 'Code',
             accessorKey: 'code',
-            cell: (row) => <span className="font-mono text-xs font-semibold">{row.code}</span>
+            cell: (row) => <span className="font-mono text-xs font-semibold tabular-nums text-[var(--text)]">{row.code}</span>
           },
           {
             header: 'Name',
             cell: (row) => (
               <div>
-                <span className="font-semibold text-sm text-[#1F2A44] block">{row.name}</span>
-                <span className="text-xs text-[#6B7385]">{row.email}</span>
+                <span className="font-semibold text-sm text-[var(--text)] block">{row.name}</span>
+                <span className="text-xs text-[var(--text-muted)]">{row.email}</span>
               </div>
             )
           },
@@ -239,15 +243,11 @@ export function EmployeesList() {
         ]}
         data={employees}
         loading={loading}
-        emptyTitle="No employees found"
-        emptyDescription="Get started by registering your company employees or importing from CSV."
-        emptyActionLabel={isHr ? "Add First Employee" : null}
-        onEmptyAction={isHr ? () => setIsAddModalOpen(true) : null}
       />
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between text-xs text-[#6B7385] pt-2">
+        <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pt-2">
           <span>Total {pagination.total} employees</span>
           <div className="flex gap-2">
             <Button
@@ -258,7 +258,7 @@ export function EmployeesList() {
             >
               Previous
             </Button>
-            <span className="self-center font-medium">Page {page} of {pagination.totalPages}</span>
+            <span className="self-center font-medium tabular-nums">Page {page} of {pagination.totalPages}</span>
             <Button
               size="sm"
               variant="secondary"
@@ -272,28 +272,28 @@ export function EmployeesList() {
       )}
 
       {/* Add Employee Modal */}
-      <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Register New Employee" maxWidth="max-w-xl">
+      <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Register new employee" maxWidth="max-w-xl">
         <form onSubmit={handleAddEmployee} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
-            <FormField label="Full Name" required>
+            <FormField label="Full name" required>
               <input
                 type="text"
                 value={addName}
                 onChange={(e) => setAddName(e.target.value)}
                 required
                 placeholder="e.g. John Doe"
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
-            <FormField label="Email Address" required>
+            <FormField label="Email address" required>
               <input
                 type="email"
                 value={addEmail}
                 onChange={(e) => setAddEmail(e.target.value)}
                 required
                 placeholder="john@company.com"
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
           </div>
@@ -304,7 +304,7 @@ export function EmployeesList() {
                 value={addDept}
                 onChange={(e) => setAddDept(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 {departments.map((d) => (
                   <option key={d._id} value={d._id}>
@@ -319,7 +319,7 @@ export function EmployeesList() {
                 value={addDesig}
                 onChange={(e) => setAddDesig(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 {designations.map((des) => (
                   <option key={des._id} value={des._id}>
@@ -331,24 +331,24 @@ export function EmployeesList() {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <FormField label="Basic Salary (PKR)" required>
+            <FormField label="Basic salary (PKR)" required>
               <input
                 type="number"
                 value={addSalary}
                 onChange={(e) => setAddSalary(e.target.value)}
                 required
                 placeholder="60000"
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
-            <FormField label="Join Date" required>
+            <FormField label="Join date" required>
               <input
                 type="date"
                 value={addJoinDate}
                 onChange={(e) => setAddJoinDate(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
@@ -356,7 +356,7 @@ export function EmployeesList() {
               <select
                 value={addGender}
                 onChange={(e) => setAddGender(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -366,13 +366,13 @@ export function EmployeesList() {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <FormField label="Phone Number">
+            <FormField label="Phone number">
               <input
                 type="text"
                 value={addPhone}
                 onChange={(e) => setAddPhone(e.target.value)}
                 placeholder="+92 300 1234567"
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
@@ -382,7 +382,7 @@ export function EmployeesList() {
                 value={addAddress}
                 onChange={(e) => setAddAddress(e.target.value)}
                 placeholder="Karachi, Pakistan"
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
           </div>
@@ -392,7 +392,7 @@ export function EmployeesList() {
               Cancel
             </Button>
             <Button type="submit" loading={addLoading}>
-              Register Employee
+              Register employee
             </Button>
           </div>
         </form>
@@ -402,15 +402,15 @@ export function EmployeesList() {
       <Modal
         isOpen={tempPassModal.open}
         onClose={() => setTempPassModal({ open: false, password: '', code: '' })}
-        title="Employee Registered Successfully"
+        title="Employee registered successfully"
       >
         <div className="space-y-4">
-          <p className="text-xs text-[#6B7385]">
+          <p className="text-xs text-[var(--text-muted)]">
             Hand over this temporary password to <strong>{tempPassModal.code}</strong>. They will be prompted to change it upon first login.
           </p>
 
-          <div className="p-4 bg-gray-50 border border-dashed border-[#12A087] rounded-lg flex items-center justify-between">
-            <code className="text-base font-mono font-bold text-[#1F2A44] select-all">
+          <div className="p-4 bg-[var(--primary-soft)] border border-dashed border-[var(--primary)] rounded-lg flex items-center justify-between">
+            <code className="text-base font-mono font-semibold text-[var(--text)] select-all">
               {tempPassModal.password}
             </code>
             <Button

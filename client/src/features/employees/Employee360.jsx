@@ -87,14 +87,14 @@ export function Employee360() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => navigate('/employees')}>
-          <ArrowLeft className="w-4 h-4 mr-1" /> Back to Directory
+          <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to directory
         </Button>
       </div>
 
       {/* Header Banner */}
       <Card className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-[#12A087]/15 text-[#12A087] flex items-center justify-center font-bold text-xl">
+          <div className="w-14 h-14 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] flex items-center justify-center font-semibold text-lg border border-[var(--primary)]/20">
             {employee.name
               .split(' ')
               .map((n) => n[0])
@@ -103,43 +103,43 @@ export function Employee360() {
               .toUpperCase()}
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-[#1F2A44]">{employee.name}</h1>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-xl font-semibold text-[var(--text)]">{employee.name}</h1>
               <StatusBadge status={employee.status} />
             </div>
-            <div className="text-xs text-[#6B7385] mt-1 space-x-3">
-              <span className="font-mono font-semibold">{employee.code}</span>
+            <div className="text-xs text-[var(--text-muted)] mt-1 space-x-2">
+              <span className="font-mono tabular-nums">{employee.code}</span>
               <span>•</span>
-              <span>{employee.designationId?.title || 'No Designation'}</span>
+              <span>{employee.designationId?.title || 'No designation'}</span>
               <span>•</span>
-              <span>{employee.departmentId?.name || 'No Department'}</span>
+              <span>{employee.departmentId?.name || 'No department'}</span>
             </div>
           </div>
         </div>
       </Card>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#E3E7EE] gap-6 text-sm font-medium">
+      <div className="flex border-b border-[var(--border)] gap-6 text-sm font-medium">
         <button
           onClick={() => setTab('overview')}
-          className={`pb-3 border-b-2 ${
+          className={`pb-3 border-b-2 transition-colors ${
             tab === 'overview'
-              ? 'border-[#12A087] text-[#12A087]'
-              : 'border-transparent text-[#6B7385] hover:text-[#1F2A44]'
+              ? 'border-[var(--primary)] text-[var(--primary)] font-medium'
+              : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
         >
-          Overview & Info
+          Overview & info
         </button>
         {isHrOrAdmin && (
           <button
             onClick={() => setTab('salary')}
-            className={`pb-3 border-b-2 ${
+            className={`pb-3 border-b-2 transition-colors ${
               tab === 'salary'
-                ? 'border-[#12A087] text-[#12A087]'
-                : 'border-transparent text-[#6B7385] hover:text-[#1F2A44]'
+                ? 'border-[var(--primary)] text-[var(--primary)] font-medium'
+                : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text)]'
             }`}
           >
-            Salary Structure
+            Salary structure
           </button>
         )}
       </div>
@@ -147,44 +147,44 @@ export function Employee360() {
       {/* Tab: Overview */}
       {tab === 'overview' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card title="Personal & Contact Details">
-            <dl className="divide-y divide-[#E3E7EE] text-sm">
+          <Card title="Personal & contact details">
+            <dl className="divide-y divide-[var(--border)] text-sm">
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Email Address</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.email}</dd>
+                <dt className="text-[var(--text-muted)]">Email address</dt>
+                <dd className="font-medium text-[var(--text)]">{employee.email}</dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Phone</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.phone || '-'}</dd>
+                <dt className="text-[var(--text-muted)]">Phone</dt>
+                <dd className="font-medium text-[var(--text)] font-mono tabular-nums">{employee.phone || '—'}</dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Address</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.address || '-'}</dd>
+                <dt className="text-[var(--text-muted)]">Address</dt>
+                <dd className="font-medium text-[var(--text)]">{employee.address || '—'}</dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Gender</dt>
-                <dd className="capitalize font-medium text-[#1F2A44]">{employee.gender}</dd>
+                <dt className="text-[var(--text-muted)]">Gender</dt>
+                <dd className="capitalize font-medium text-[var(--text)]">{employee.gender}</dd>
               </div>
             </dl>
           </Card>
 
-          <Card title="Job & Organization">
-            <dl className="divide-y divide-[#E3E7EE] text-sm">
+          <Card title="Job & organization">
+            <dl className="divide-y divide-[var(--border)] text-sm">
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Department</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.departmentId?.name || '-'}</dd>
+                <dt className="text-[var(--text-muted)]">Department</dt>
+                <dd className="font-medium text-[var(--text)]">{employee.departmentId?.name || '—'}</dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Designation</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.designationId?.title || '-'}</dd>
+                <dt className="text-[var(--text-muted)]">Designation</dt>
+                <dd className="font-medium text-[var(--text)]">{employee.designationId?.title || '—'}</dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Join Date</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.joinDate}</dd>
+                <dt className="text-[var(--text-muted)]">Join date</dt>
+                <dd className="font-medium text-[var(--text)] font-mono tabular-nums">{employee.joinDate}</dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Exit Date</dt>
-                <dd className="font-medium text-[#1F2A44]">{employee.exitDate || 'Active in service'}</dd>
+                <dt className="text-[var(--text-muted)]">Exit date</dt>
+                <dd className="font-medium text-[var(--text)] font-mono tabular-nums">{employee.exitDate || 'Active in service'}</dd>
               </div>
             </dl>
           </Card>
@@ -194,56 +194,56 @@ export function Employee360() {
       {/* Tab: Salary Structure */}
       {tab === 'salary' && salary && (
         <div className="max-w-xl space-y-4">
-          <Card title="Monthly Salary Breakdown (PKR)">
-            <p className="text-xs text-[#6B7385] mb-4">
-              Per Rule 3.6: Gross = 1.5 × Basic (HRA 40% + Medical 10%).
+          <Card title="Monthly salary breakdown (PKR)">
+            <p className="text-xs text-[var(--text-muted)] mb-4">
+              Per rule 3.6: Gross = 1.5 × Basic (HRA 40% + Medical 10%).
             </p>
 
-            <dl className="divide-y divide-[#E3E7EE] text-sm mb-6">
+            <dl className="divide-y divide-[var(--border)] text-sm mb-6">
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Basic Salary</dt>
-                <dd className="font-mono font-bold text-[#1F2A44]">
+                <dt className="text-[var(--text-muted)]">Basic salary</dt>
+                <dd className="font-mono tabular-nums font-semibold text-[var(--text)]">
                   PKR {salary.basicSalary.toLocaleString()}
                 </dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">House Rent Allowance (HRA 40%)</dt>
-                <dd className="font-mono font-medium text-[#1F2A44]">
+                <dt className="text-[var(--text-muted)]">House rent allowance (HRA 40%)</dt>
+                <dd className="font-mono tabular-nums text-[var(--text)]">
                   PKR {salary.hra.toLocaleString()}
                 </dd>
               </div>
               <div className="py-2.5 flex justify-between">
-                <dt className="text-[#6B7385]">Medical Allowance (10%)</dt>
-                <dd className="font-mono font-medium text-[#1F2A44]">
+                <dt className="text-[var(--text-muted)]">Medical allowance (10%)</dt>
+                <dd className="font-mono tabular-nums text-[var(--text)]">
                   PKR {salary.medical.toLocaleString()}
                 </dd>
               </div>
-              <div className="py-3 flex justify-between bg-gray-50 px-3 rounded-lg font-bold">
-                <dt className="text-[#1F2A44]">Total Monthly Gross</dt>
-                <dd className="font-mono text-[#12A087] text-base">
+              <div className="py-3 flex justify-between bg-[var(--surface-muted)] px-3 rounded-lg font-semibold border border-[var(--border)]">
+                <dt className="text-[var(--text)]">Total monthly gross</dt>
+                <dd className="font-mono tabular-nums text-[var(--primary)] text-base">
                   PKR {salary.gross.toLocaleString()}
                 </dd>
               </div>
             </dl>
 
             {isHr && (
-              <form onSubmit={handleUpdateSalary} className="border-t border-[#E3E7EE] pt-4 space-y-3">
+              <form onSubmit={handleUpdateSalary} className="border-t border-[var(--border)] pt-4 space-y-3">
                 {salaryMsg && (
-                  <div className="p-3 bg-blue-50 text-blue-700 text-xs rounded-lg font-medium">
+                  <div className="p-3 bg-[var(--primary-soft)] text-[var(--primary)] border border-[var(--primary)]/20 text-xs rounded-lg font-medium">
                     {salaryMsg}
                   </div>
                 )}
-                <FormField label="Update Basic Salary (PKR)" required helperText="Gross will automatically recalculate.">
+                <FormField label="Update basic salary (PKR)" required helperText="Gross will automatically recalculate.">
                   <div className="flex gap-2">
                     <input
                       type="number"
                       value={newSalary}
                       onChange={(e) => setNewSalary(e.target.value)}
                       required
-                      className="flex-1 px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                      className="flex-1 px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                     />
                     <Button type="submit" loading={savingSalary}>
-                      Save Salary
+                      Save salary
                     </Button>
                   </div>
                 </FormField>

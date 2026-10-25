@@ -102,14 +102,14 @@ export function UsersScreen() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-[#1F2A44]">Users & Logins</h1>
-          <p className="text-xs text-[#6B7385] mt-1">
-            Manage company administrator and HR team access credentials.
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">Users and logins</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
+            Manage company administrator and HR team access credentials
           </p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>
-          <UserPlus className="w-4 h-4 mr-1.5" />
-          Create HR Login
+        <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
+          <UserPlus className="w-4 h-4" />
+          <span>Create HR login</span>
         </Button>
       </div>
 
@@ -119,7 +119,7 @@ export function UsersScreen() {
           {
             header: 'Role',
             cell: (row) => (
-              <span className="uppercase text-xs font-semibold px-2 py-0.5 rounded bg-gray-100 text-[#1F2A44]">
+              <span className="capitalize text-xs font-medium px-2 py-0.5 rounded bg-[var(--surface-muted)] text-[var(--text)] border border-[var(--border)]">
                 {row.role}
               </span>
             )
@@ -134,9 +134,9 @@ export function UsersScreen() {
             )
           },
           {
-            header: 'Password Change',
+            header: 'Password change',
             cell: (row) => (
-              <span className="text-xs text-[#6B7385]">
+              <span className="text-xs text-[var(--text-muted)]">
                 {row.mustChangePassword ? 'Required on first login' : 'Configured'}
               </span>
             )
@@ -149,7 +149,7 @@ export function UsersScreen() {
                   size="sm"
                   variant="secondary"
                   onClick={() => handleResetPassword(row._id, row.email)}
-                  title="Reset Password"
+                  title="Reset password"
                 >
                   <Key className="w-3.5 h-3.5 mr-1" /> Reset
                 </Button>
@@ -171,27 +171,27 @@ export function UsersScreen() {
       />
 
       {/* Create HR Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create HR Team Member">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create HR team member">
         <form onSubmit={handleCreateHR} className="space-y-4">
-          <FormField label="Full Name" required>
+          <FormField label="Full name" required>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              placeholder="Sarah Jenkins"
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+              placeholder="e.g. Sarah Jenkins"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
           </FormField>
 
-          <FormField label="Company Email" required>
+          <FormField label="Company email" required>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="sarah@company.com"
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
           </FormField>
 
@@ -201,7 +201,7 @@ export function UsersScreen() {
                 value={departmentId}
                 onChange={(e) => setDepartmentId(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 {departments.map((d) => (
                   <option key={d._id} value={d._id}>
@@ -216,7 +216,7 @@ export function UsersScreen() {
                 value={designationId}
                 onChange={(e) => setDesignationId(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 {designations.map((des) => (
                   <option key={des._id} value={des._id}>
@@ -228,24 +228,24 @@ export function UsersScreen() {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <FormField label="Basic Salary (PKR)" required>
+            <FormField label="Basic salary (PKR)" required>
               <input
                 type="number"
                 value={basicSalary}
                 onChange={(e) => setBasicSalary(e.target.value)}
                 required
                 placeholder="60000"
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
-            <FormField label="Join Date" required>
+            <FormField label="Join date" required>
               <input
                 type="date"
                 value={joinDate}
                 onChange={(e) => setJoinDate(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
           </div>
@@ -255,7 +255,7 @@ export function UsersScreen() {
               Cancel
             </Button>
             <Button type="submit" loading={createLoading}>
-              Create HR User
+              Create HR user
             </Button>
           </div>
         </form>
@@ -265,15 +265,15 @@ export function UsersScreen() {
       <Modal
         isOpen={tempPassModal.open}
         onClose={() => setTempPassModal({ open: false, password: '', email: '' })}
-        title="Temporary Password Generated"
+        title="Temporary password generated"
       >
         <div className="space-y-4">
-          <p className="text-xs text-[#6B7385]">
+          <p className="text-xs text-[var(--text-muted)]">
             Copy this temporary password now for <strong>{tempPassModal.email}</strong>. It will not be shown again.
           </p>
 
-          <div className="p-4 bg-gray-50 border border-dashed border-[#12A087] rounded-lg flex items-center justify-between">
-            <code className="text-base font-mono font-bold text-[#1F2A44] select-all">
+          <div className="p-4 bg-[var(--surface-muted)] border border-dashed border-[var(--primary)] rounded-lg flex items-center justify-between">
+            <code className="text-base font-mono font-semibold text-[var(--text)] select-all">
               {tempPassModal.password}
             </code>
             <Button

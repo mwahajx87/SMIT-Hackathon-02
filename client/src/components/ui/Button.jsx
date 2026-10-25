@@ -18,10 +18,11 @@ export function Button({
   };
 
   const variants = {
-    primary: "bg-[#0E8F7A] text-white hover:bg-[#0B7664] focus:ring-[#0E8F7A] border border-transparent shadow-none",
+    primary: "bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] focus:ring-[var(--primary)] border border-transparent shadow-none",
     secondary: "bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] hover:bg-[var(--bg)] focus:ring-[var(--border)]",
-    danger: "bg-[#C23B3B] text-white hover:bg-[#A83232] focus:ring-[#C23B3B] border border-transparent",
-    ai: "bg-transparent text-[#5B4FCF] border border-[#5B4FCF] hover:bg-[#EFEDFB] focus:ring-[#5B4FCF]",
+    outline: "bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] hover:bg-[var(--bg)] focus:ring-[var(--border)]",
+    danger: "bg-[var(--danger)] text-white hover:opacity-90 focus:ring-[var(--danger)] border border-transparent",
+    ai: "bg-transparent text-[var(--ai)] border border-[var(--ai)] hover:bg-[var(--ai-soft)] focus:ring-[var(--ai)]",
     ghost: "bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg)] hover:text-[var(--text)] border border-transparent"
   };
 

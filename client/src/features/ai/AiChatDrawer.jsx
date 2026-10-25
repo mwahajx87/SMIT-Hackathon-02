@@ -66,72 +66,80 @@ export function AiChatDrawer({ isOpen, onClose }) {
         onClick={onClose}
       />
 
-      {/* Drawer Panel */}
-      <div className="relative w-full max-w-md bg-white shadow-2xl flex flex-col h-full z-10 border-l border-[#E3E7EE]">
+      {/* Drawer Panel (420px width, full screen on mobile) */}
+      <div className="relative w-full max-w-[420px] bg-[var(--surface)] dropdown-shadow flex flex-col h-full z-10 border-l border-[var(--border)] transition-colors">
         {/* Header */}
-        <div className="p-4 bg-[#1F2A44] text-white flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-[#5B4FCF] flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
+        <div className="h-16 px-4 bg-[var(--surface)] border-b border-[var(--border)] flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-[var(--ai-soft)] text-[var(--ai)] flex items-center justify-center font-bold text-xs select-none">
+              ✦
             </div>
             <div>
-              <h2 className="font-bold text-sm">HCM Lite AI Assistant</h2>
-              <span className="text-[10px] text-gray-300 block">Context-aware policy & data helper</span>
+              <h2 className="font-semibold text-sm text-[var(--text)]">HCM Lite assistant</h2>
+              <span className="text-[11px] text-[var(--text-muted)] block">Policy, leave & attendance helper</span>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 rounded-md text-gray-400 hover:text-white">
-            <X className="w-5 h-5" />
+          <button 
+            onClick={onClose} 
+            aria-label="Close assistant"
+            className="p-1.5 rounded-md text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg)] transition-colors"
+          >
+            <X className="w-5 h-5 stroke-[1.75]" />
           </button>
         </div>
 
         {/* Message Stream */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50">
+        <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-[var(--bg)]">
           {messages.map((m, i) => (
             <div
               key={i}
               className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs leading-relaxed ${
+                className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-xs leading-relaxed ${
                   m.role === 'user'
-                    ? 'bg-[#12A087] text-white rounded-br-none'
-                    : 'bg-white text-[#1F2A44] border border-[#E3E7EE] shadow-xs rounded-bl-none'
+                    ? 'bg-[var(--primary-soft)] text-[var(--primary)] font-normal'
+                    : 'bg-[var(--surface)] text-[var(--text)] border border-[var(--border)]'
                 }`}
               >
                 {m.content}
               </div>
-              {m.label && (
-                <span className="text-[9px] text-[#6B7385] mt-1 px-1 flex items-center gap-1 font-medium">
-                  <Sparkles className="w-2.5 h-2.5 text-[#5B4FCF]" />
-                  {m.label}
+              {m.role === 'assistant' && (
+                <span className="inline-flex items-center px-2 py-0.5 mt-1 rounded-full text-[10px] font-medium bg-[var(--ai-soft)] text-[var(--ai)]">
+                  AI-generated
                 </span>
               )}
             </div>
           ))}
 
           {loading && (
-            <div className="flex items-center gap-2 text-xs text-[#6B7385] p-2 bg-white rounded-lg border border-[#E3E7EE] w-fit">
-              <Bot className="w-3.5 h-3.5 animate-spin text-[#5B4FCF]" />
-              <span>Consulting policy & tools...</span>
+            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] p-2.5 bg-[var(--surface)] rounded-lg border border-[var(--border)] w-fit">
+              <Bot className="w-3.5 h-3.5 animate-spin text-[var(--ai)]" />
+              <span>Consulting policy & data...</span>
             </div>
           )}
 
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-[var(--danger)] text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 stroke-[1.75]" />
               <span>{error}</span>
             </div>
           )}
         </div>
 
-        {/* Suggested Prompts */}
-        <div className="p-3 bg-white border-t border-[#E3E7EE] overflow-x-auto flex gap-2">
-          {suggestedPrompts.map((p, i) => (
+        {/* Suggested Prompts (including Roman Urdu examples per Section 12) */}
+        <div className="p-2.5 bg-[var(--surface)] border-t border-[var(--border)] overflow-x-auto flex gap-1.5">
+          {[
+            'What is the grace period?',
+            'Kal chutti chahiye',
+            'Leave balance kitna hai?',
+            'Overtime calculation'
+          ].map((p, i) => (
             <button
               key={i}
               onClick={() => handleSend(p)}
               disabled={loading}
-              className="text-[10px] whitespace-nowrap bg-slate-100 hover:bg-[#5B4FCF]/10 hover:text-[#5B4FCF] px-2.5 py-1 rounded-full text-[#6B7385] font-medium transition-colors"
+              className="text-[11px] whitespace-nowrap bg-[var(--bg)] hover:bg-[var(--ai-soft)] hover:text-[var(--ai)] px-2.5 py-1 rounded-full text-[var(--text-muted)] font-normal border border-[var(--border)] transition-colors cursor-pointer"
             >
               {p}
             </button>
@@ -144,26 +152,27 @@ export function AiChatDrawer({ isOpen, onClose }) {
             e.preventDefault();
             handleSend();
           }}
-          className="p-3 bg-white border-t border-[#E3E7EE] flex items-center gap-2"
+          className="p-3 bg-[var(--surface)] border-t border-[var(--border)] flex items-center gap-2"
         >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask AI anything about HCM Lite policies..."
+            placeholder="Ask AI anything about policies, leave..."
             disabled={loading}
-            className="flex-1 px-3 py-2 border border-[#E3E7EE] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#5B4FCF]"
+            className="flex-1 px-3 py-2 border border-[var(--border)] rounded-lg text-xs bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--ai)]"
           />
           <Button
             type="submit"
             size="sm"
             disabled={loading || !input.trim()}
-            className="bg-[#5B4FCF] hover:bg-[#4A3EB5] text-white p-2"
+            className="bg-[var(--ai)] hover:opacity-90 text-white h-9 px-3"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3.5 h-3.5 stroke-[1.75]" />
           </Button>
         </form>
       </div>
     </div>
   );
 }
+

@@ -171,15 +171,15 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150">
-        <div className="p-4 border-b border-[#E3E7EE] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-[#12A087]/10 text-[#12A087]">
+      <div className="bg-[var(--surface)] rounded-2xl max-w-md w-full overflow-hidden border border-[var(--border)] animate-in fade-in zoom-in-95 duration-150">
+        <div className="p-4 border-b border-[var(--border)] flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded-lg bg-[var(--primary-soft)] text-[var(--primary)]">
               <Camera className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-[#1F2A44]">Camera Face Check-in</h3>
-              <p className="text-[11px] text-[#6B7385]">Verify face and office GPS radius</p>
+              <h3 className="font-semibold text-sm text-[var(--text)]">Camera face check-in</h3>
+              <p className="text-xs text-[var(--text-muted)]">Verify face and office GPS radius</p>
             </div>
           </div>
           <button
@@ -187,7 +187,7 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
               stopCamera();
               onClose();
             }}
-            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            className="p-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -195,14 +195,14 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
 
         <div className="p-4 space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-start gap-2">
+            <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-rose-600 dark:text-rose-400 rounded-xl text-xs flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Camera Viewport */}
-          <div className="relative aspect-4/3 bg-black rounded-xl overflow-hidden flex items-center justify-center border-2 border-dashed border-gray-300">
+          <div className="relative aspect-4/3 bg-black rounded-xl overflow-hidden flex items-center justify-center border-2 border-dashed border-[var(--border)]">
             <video
               ref={videoRef}
               autoPlay
@@ -215,22 +215,22 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
             <div
               className={`absolute inset-0 m-auto w-44 h-56 rounded-full border-2 transition-colors duration-300 pointer-events-none flex flex-col items-center justify-between py-3 ${
                 facesDetected === 1
-                  ? 'border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.4)]'
+                  ? 'border-[var(--primary)] shadow-[0_0_20px_rgba(14,143,122,0.4)]'
                   : 'border-white/60'
               }`}
             >
-              <span className="text-[10px] text-white/90 bg-black/50 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-[10px] text-white/90 bg-black/60 px-2 py-0.5 rounded-full font-medium">
                 {facesDetected === 1
-                  ? '✓ Face Detected'
+                  ? '✓ Face detected'
                   : facesDetected > 1
-                  ? 'Multiple Faces Detected'
-                  : 'Align Face in Oval'}
+                  ? 'Multiple faces detected'
+                  : 'Align face in oval'}
               </span>
             </div>
 
             {/* Status pills */}
             <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[11px] text-white font-medium">
-              <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5">
+              <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5 font-mono tabular-nums">
                 <span
                   className={`w-2 h-2 rounded-full ${
                     facesDetected === 1 ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
@@ -239,7 +239,7 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
                 Faces: {facesDetected}
               </span>
 
-              <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5">
+              <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5 font-mono tabular-nums">
                 {locating ? (
                   <>
                     <RefreshCw className="w-3 h-3 animate-spin" /> Locating...
@@ -257,8 +257,8 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
           </div>
 
           {/* Guidelines */}
-          <div className="bg-slate-50 p-3 rounded-xl space-y-1 text-xs text-[#6B7385]">
-            <p className="font-semibold text-[#1F2A44]">Instructions:</p>
+          <div className="bg-[var(--surface-muted)] p-3 rounded-xl space-y-1 text-xs text-[var(--text-muted)] border border-[var(--border)]">
+            <p className="font-medium text-[var(--text)]">Instructions:</p>
             <ul className="list-disc pl-4 space-y-0.5">
               <li>Ensure your face is clearly visible and well-lit.</li>
               <li>Only one person must be in the camera frame.</li>
@@ -283,9 +283,9 @@ export function CameraCheckInModal({ isOpen, onClose, onSuccess }) {
               onClick={handleCameraCheckIn}
               loading={submitting}
               disabled={!canSubmit}
-              className="flex-1 bg-[#12A087] hover:bg-[#0E806C] text-white"
+              className="flex-1"
             >
-              Verify & Check In
+              Verify & check in
             </Button>
           </div>
         </div>

@@ -55,94 +55,94 @@ export function SetupScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-lg">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-[#12A087]/10 rounded-full text-[#12A087] mb-2">
-            <Building2 className="w-6 h-6" />
+    <div className="min-h-screen bg-[var(--bg)] flex flex-col justify-center items-center px-4 py-12 transition-colors">
+      <div className="w-full max-w-lg space-y-6">
+        <div className="text-center">
+          <div className="w-10 h-10 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold mx-auto mb-3 select-none">
+            <Building2 className="w-5 h-5 stroke-[1.75]" />
           </div>
-          <h1 className="text-2xl font-bold text-[#1F2A44]">First-Run Company Setup</h1>
-          <p className="text-sm text-[#6B7385] mt-1">Configure your organization and create the master Admin login.</p>
+          <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">First-run company setup</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">Configure your organization and create the master admin login.</p>
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${step === 1 ? 'bg-[#12A087] text-white' : 'bg-gray-200 text-[#6B7385]'}`}>
-            1. Company Profile
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <div className={`px-3 py-1 rounded-full text-xs font-medium ${step === 1 ? 'bg-[var(--primary)] text-white' : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)]'}`}>
+            1. Company profile
           </div>
-          <span className="text-gray-300">→</span>
-          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${step === 2 ? 'bg-[#12A087] text-white' : 'bg-gray-200 text-[#6B7385]'}`}>
-            2. Admin Account
+          <span className="text-[var(--text-muted)] text-xs select-none">→</span>
+          <div className={`px-3 py-1 rounded-full text-xs font-medium ${step === 2 ? 'bg-[var(--primary)] text-white' : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)]'}`}>
+            2. Admin account
           </div>
         </div>
 
         <Card>
           {error && (
-            <div className="p-3 mb-4 bg-[#D64545]/10 border border-[#D64545]/20 rounded-lg text-xs text-[#D64545]">
+            <div className="p-3 mb-4 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-xs text-[var(--danger)]">
               {error}
             </div>
           )}
 
           {step === 1 && (
             <form onSubmit={handleNext} className="space-y-4">
-              <FormField label="Company Name" required helperText="e.g. Acme Industries Ltd.">
+              <FormField label="Company name" required helperText="e.g. Acme Industries Ltd.">
                 <input
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   required
                   placeholder="Acme Corporation"
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <Button type="submit" className="w-full">
-                Next: Setup Admin Account
+              <Button type="submit" className="w-full h-10">
+                Continue to admin account
               </Button>
             </form>
           )}
 
           {step === 2 && (
             <form onSubmit={handleFinishSetup} className="space-y-4">
-              <FormField label="Admin Email" required>
+              <FormField label="Admin email" required>
                 <input
                   type="email"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
                   required
                   placeholder="admin@company.com"
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Admin Password" required helperText="Minimum 6 characters">
+              <FormField label="Admin password" required helperText="Minimum 6 characters">
                 <input
                   type="password"
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
-              <FormField label="Confirm Password" required>
+              <FormField label="Confirm password" required>
                 <input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </FormField>
 
               <div className="flex gap-3 pt-2">
-                <Button type="button" variant="secondary" onClick={() => setStep(1)} className="flex-1">
+                <Button type="button" variant="secondary" onClick={() => setStep(1)} className="flex-1 h-10">
                   Back
                 </Button>
-                <Button type="submit" loading={loading} className="flex-1">
-                  Complete Setup
+                <Button type="submit" loading={loading} className="flex-1 h-10">
+                  Complete setup
                 </Button>
               </div>
             </form>

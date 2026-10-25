@@ -140,21 +140,21 @@ export function PayrollScreen() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2A44]">Payroll Management</h1>
-          <p className="text-sm text-[#6B7385]">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">Payroll</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
             Generate monthly salary drafts, review itemized breakdowns, and finalize runs
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2">
             <Plus className="w-4 h-4" />
-            <span>New Payroll Run</span>
+            <span>Generate draft</span>
           </Button>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+        <div className="p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300 text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -165,9 +165,9 @@ export function PayrollScreen() {
         {/* Runs Navigation Column */}
         <div className="space-y-4">
           <Card className="p-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E3E7EE]">
-              <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider">Payroll Periods</h2>
-              <Button variant="ghost" size="sm" onClick={fetchRuns} className="p-1.5 h-auto text-[#6B7385]">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+              <h2 className="text-sm font-semibold text-[var(--text)]">Payroll periods</h2>
+              <Button variant="ghost" size="sm" onClick={fetchRuns} className="p-1.5 h-auto text-[var(--text-muted)]">
                 <RefreshCw className="w-4 h-4" />
               </Button>
             </div>
@@ -179,8 +179,8 @@ export function PayrollScreen() {
                 <Skeleton className="h-12 w-full" />
               </div>
             ) : runs.length === 0 ? (
-              <div className="py-6 text-center text-xs text-[#6B7385]">
-                No payroll runs created yet. Click "New Payroll Run" to start.
+              <div className="py-6 text-center text-xs text-[var(--text-muted)]">
+                No payroll runs created yet. Click "Generate draft" to start.
               </div>
             ) : (
               <div className="space-y-2 pt-3">
@@ -188,21 +188,21 @@ export function PayrollScreen() {
                   <button
                     key={r._id}
                     onClick={() => loadRunDetail(r._id)}
-                    className={`w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between ${
+                    className={`w-full text-left p-3 rounded-lg border transition-colors flex items-center justify-between ${
                       selectedRun?._id === r._id
-                        ? 'border-[#12A087] bg-[#12A087]/5 ring-1 ring-[#12A087]'
-                        : 'border-[#E3E7EE] hover:bg-slate-50 bg-white'
+                        ? 'border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]'
+                        : 'border-[var(--border)] hover:bg-[var(--surface-muted)] bg-[var(--surface)] text-[var(--text)]'
                     }`}
                   >
                     <div>
-                      <div className="font-bold text-sm text-[#1F2A44]">{r.month}</div>
-                      <div className="text-xs text-[#6B7385]">
+                      <div className="font-medium text-sm text-[var(--text)]">{r.month}</div>
+                      <div className="text-xs text-[var(--text-muted)] font-mono tabular-nums">
                         PKR {r.totalNet?.toLocaleString() || '0'} • {r.totalEmployees} employees
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <StatusBadge status={r.status} />
-                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                      <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
                     </div>
                   </button>
                 ))}
@@ -222,7 +222,7 @@ export function PayrollScreen() {
           ) : !selectedRun ? (
             <Card className="p-12 text-center">
               <EmptyState
-                title="Select a Payroll Run"
+                title="Select a payroll run"
                 description="Choose a payroll period from the list on the left to inspect payslip details."
               />
             </Card>
@@ -230,15 +230,15 @@ export function PayrollScreen() {
             <>
               {/* Run Summary Header */}
               <Card className="p-6 space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#E3E7EE]">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[var(--border)]">
                   <div>
                     <div className="flex items-center gap-3">
-                      <h2 className="text-xl font-bold text-[#1F2A44]">
+                      <h2 className="text-lg font-semibold text-[var(--text)]">
                         Period: {selectedRun.month}
                       </h2>
                       <StatusBadge status={selectedRun.status} />
                     </div>
-                    <p className="text-xs text-[#6B7385] mt-1">
+                    <p className="text-xs text-[var(--text-muted)] mt-1">
                       Created by {selectedRun.createdBy?.email || 'System'}
                       {selectedRun.status === 'finalized' && (
                         <span> • Finalized on {new Date(selectedRun.finalizedAt).toLocaleDateString()}</span>
@@ -250,7 +250,7 @@ export function PayrollScreen() {
                     {selectedRun.status === 'draft' ? (
                       <>
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           onClick={handleRegenerate}
                           className="flex items-center gap-1.5"
@@ -262,43 +262,43 @@ export function PayrollScreen() {
                           <Button
                             size="sm"
                             onClick={() => setShowFinalizeModal(true)}
-                            className="bg-[#12A087] hover:bg-[#0E806C] text-white flex items-center gap-1.5"
+                            className="flex items-center gap-1.5"
                           >
                             <Lock className="w-3.5 h-3.5" />
-                            <span>Finalize Run</span>
+                            <span>Finalize run</span>
                           </Button>
                         )}
                       </>
                     ) : (
-                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--surface-muted)] text-[var(--text-muted)] text-xs font-medium border border-[var(--border)]">
                         <Lock className="w-3.5 h-3.5" />
-                        <span>Locked & Finalized</span>
-                      </div>
+                        <span>Locked & finalized</span>
+                      </span>
                     )}
                   </div>
                 </div>
 
                 {/* KPI chips */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="p-3 bg-slate-50 rounded-lg">
-                    <span className="text-[11px] font-semibold text-[#6B7385] uppercase">Employees</span>
-                    <div className="text-lg font-bold text-[#1F2A44]">{selectedRun.totalEmployees}</div>
+                  <div className="p-3 bg-[var(--surface-muted)] rounded-lg border border-[var(--border)]">
+                    <span className="text-xs font-medium text-[var(--text-muted)]">Employees</span>
+                    <div className="text-xl font-semibold text-[var(--text)] mt-1 font-mono tabular-nums">{selectedRun.totalEmployees}</div>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-lg">
-                    <span className="text-[11px] font-semibold text-[#6B7385] uppercase">Gross Total</span>
-                    <div className="text-lg font-bold text-[#1F2A44]">
+                  <div className="p-3 bg-[var(--surface-muted)] rounded-lg border border-[var(--border)]">
+                    <span className="text-xs font-medium text-[var(--text-muted)]">Total gross</span>
+                    <div className="text-xl font-semibold text-[var(--text)] mt-1 font-mono tabular-nums">
                       PKR {selectedRun.totalGross?.toLocaleString()}
                     </div>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-lg">
-                    <span className="text-[11px] font-semibold text-[#6B7385] uppercase">Total Deductions</span>
-                    <div className="text-lg font-bold text-red-600">
+                  <div className="p-3 bg-[var(--surface-muted)] rounded-lg border border-[var(--border)]">
+                    <span className="text-xs font-medium text-[var(--text-muted)]">Total deductions</span>
+                    <div className="text-xl font-semibold text-rose-600 dark:text-rose-400 mt-1 font-mono tabular-nums">
                       - PKR {selectedRun.totalDeductions?.toLocaleString()}
                     </div>
                   </div>
-                  <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-                    <span className="text-[11px] font-semibold text-emerald-800 uppercase">Net Disbursement</span>
-                    <div className="text-lg font-extrabold text-[#12A087]">
+                  <div className="p-3 bg-[var(--primary-soft)] rounded-lg border border-[var(--primary)]/20">
+                    <span className="text-xs font-medium text-[var(--primary)]">Total net disbursement</span>
+                    <div className="text-xl font-semibold text-[var(--primary)] mt-1 font-mono tabular-nums">
                       PKR {selectedRun.totalNet?.toLocaleString()}
                     </div>
                   </div>
@@ -307,51 +307,51 @@ export function PayrollScreen() {
 
               {/* Items Table */}
               <Card className="overflow-hidden">
-                <div className="p-4 border-b border-[#E3E7EE]">
-                  <h3 className="text-sm font-bold text-[#1F2A44]">Itemized Employee Payslips</h3>
+                <div className="p-4 border-b border-[var(--border)]">
+                  <h3 className="text-sm font-semibold text-[var(--text)]">Itemized employee payslips</h3>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#F8FAFC] text-[#6B7385] uppercase font-semibold border-b border-[#E3E7EE]">
+                    <thead className="bg-[var(--surface-muted)] text-[var(--text-muted)] font-medium border-b border-[var(--border)]">
                       <tr>
                         <th className="px-4 py-3">Employee</th>
                         <th className="px-4 py-3">Basic</th>
                         <th className="px-4 py-3">Gross (1.5x)</th>
-                        <th className="px-4 py-3">Ded. Days</th>
+                        <th className="px-4 py-3">Ded. days</th>
                         <th className="px-4 py-3">Deductions</th>
                         <th className="px-4 py-3">Tax</th>
-                        <th className="px-4 py-3">Net Pay</th>
+                        <th className="px-4 py-3">Net pay</th>
                         <th className="px-4 py-3 text-right">PDF</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E3E7EE]">
+                    <tbody className="divide-y divide-[var(--border)]">
                       {selectedRun.items?.map((item) => (
-                        <tr key={item._id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={item._id} className="hover:bg-[var(--surface-muted)]/50 transition-colors">
                           <td className="px-4 py-3">
-                            <div className="font-semibold text-[#1F2A44]">{item.employeeName}</div>
-                            <div className="text-[10px] text-[#6B7385]">{item.employeeCode} • {item.departmentName}</div>
+                            <div className="font-medium text-[var(--text)]">{item.employeeName}</div>
+                            <div className="text-[11px] text-[var(--text-muted)]">{item.employeeCode} • {item.departmentName}</div>
                           </td>
-                          <td className="px-4 py-3 text-[#1F2A44]">{item.basicSalary?.toLocaleString()}</td>
-                          <td className="px-4 py-3 font-medium text-[#1F2A44]">{item.grossSalary?.toLocaleString()}</td>
-                          <td className="px-4 py-3 text-[#6B7385]">
+                          <td className="px-4 py-3 font-mono tabular-nums text-[var(--text)]">{item.basicSalary?.toLocaleString()}</td>
+                          <td className="px-4 py-3 font-mono tabular-nums text-[var(--text)]">{item.grossSalary?.toLocaleString()}</td>
+                          <td className="px-4 py-3 font-mono tabular-nums text-[var(--text-muted)]">
                             {item.deductionDays}d
-                            <span className="text-[9px] block text-gray-400">
-                              (abs:{item.absentDays}, unp:{item.unpaidLeaveDays}, hlf:{item.halfDays}{item.latePenaltyDays ? `, latePen:+${item.latePenaltyDays}d (${item.lateDays} lates)` : ''})
+                            <span className="text-[10px] block text-[var(--text-muted)]">
+                              (abs:{item.absentDays}, unp:{item.unpaidLeaveDays}, hlf:{item.halfDays}{item.latePenaltyDays ? `, latePen:+${item.latePenaltyDays}d` : ''})
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-red-600 font-medium">
+                          <td className="px-4 py-3 font-mono tabular-nums text-rose-600 dark:text-rose-400 font-medium">
                             {item.deductionAmount > 0 ? `-${item.deductionAmount.toLocaleString()}` : '0'}
                           </td>
-                          <td className="px-4 py-3 text-[#6B7385]">{item.monthlyTax?.toLocaleString() || '0'}</td>
-                          <td className="px-4 py-3 font-bold text-[#12A087]">
+                          <td className="px-4 py-3 font-mono tabular-nums text-[var(--text-muted)]">{item.monthlyTax?.toLocaleString() || '0'}</td>
+                          <td className="px-4 py-3 font-mono tabular-nums font-semibold text-[var(--primary)]">
                             PKR {item.netSalary?.toLocaleString()}
                           </td>
                           <td className="px-4 py-3 text-right">
                             <button
                               onClick={() => handleDownloadPdf(item.employeeId)}
-                              title="Download Payslip PDF"
-                              className="text-gray-500 hover:text-[#12A087] p-1 rounded"
+                              title="Download payslip PDF"
+                              className="text-[var(--text-muted)] hover:text-[var(--primary)] p-1.5 rounded transition-colors"
                             >
                               <FileText className="w-4 h-4" />
                             </button>
@@ -371,27 +371,27 @@ export function PayrollScreen() {
       <Modal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        title="Generate Payroll Draft"
+        title="Generate payroll draft"
       >
         <form onSubmit={handleCreateRun} className="space-y-4">
           {createError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded text-red-600 text-xs">
+            <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-red-600 dark:text-red-400 text-xs">
               {createError}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-[#1F2A44] uppercase mb-1">
-              Select Payroll Month (YYYY-MM)
+            <label className="block text-xs font-medium text-[var(--text)] mb-1">
+              Select payroll month <span className="text-[var(--text-muted)]">(required)</span>
             </label>
             <input
               type="month"
               required
               value={monthInput}
               onChange={(e) => setMonthInput(e.target.value)}
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
-            <p className="text-xs text-[#6B7385] mt-1">
+            <p className="text-xs text-[var(--text-muted)] mt-1.5">
               The engine will compute working days, attendance deductions, approved unpaid leaves, and income tax slabs automatically.
             </p>
           </div>
@@ -399,14 +399,14 @@ export function PayrollScreen() {
           <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={() => setShowCreateModal(false)}
               disabled={submitting}
             >
               Cancel
             </Button>
             <Button type="submit" disabled={submitting}>
-              {submitting ? 'Generating...' : 'Generate Draft'}
+              {submitting ? 'Generating...' : 'Generate draft'}
             </Button>
           </div>
         </form>
@@ -416,22 +416,22 @@ export function PayrollScreen() {
       <Modal
         isOpen={showFinalizeModal}
         onClose={() => setShowFinalizeModal(false)}
-        title="Finalize Payroll Run"
+        title="Finalize payroll run"
       >
         <div className="space-y-4">
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-xs leading-relaxed">
+          <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-lg text-amber-800 dark:text-amber-300 text-xs leading-relaxed">
             <strong>Warning:</strong> Finalizing this payroll run will permanently lock it.
             No further modifications or regenerations can be made, and official payslips will become accessible to employees.
           </div>
 
-          <p className="text-sm text-[#1F2A44]">
+          <p className="text-sm text-[var(--text)]">
             Are you sure you want to finalize the payroll run for <strong>{selectedRun?.month}</strong>?
           </p>
 
           <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={() => setShowFinalizeModal(false)}
               disabled={finalizing}
             >
@@ -440,9 +440,8 @@ export function PayrollScreen() {
             <Button
               onClick={handleFinalize}
               disabled={finalizing}
-              className="bg-[#12A087] hover:bg-[#0E806C] text-white"
             >
-              {finalizing ? 'Finalizing...' : 'Yes, Lock & Finalize'}
+              {finalizing ? 'Finalizing...' : 'Yes, lock & finalize'}
             </Button>
           </div>
         </div>

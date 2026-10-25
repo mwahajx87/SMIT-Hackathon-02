@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card.jsx';
 import { Button } from '../../components/ui/Button.jsx';
+import { StatusBadge } from '../../components/ui/StatusBadge.jsx';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';
 import { apiRequest } from '../../lib/api.js';
-import { FileText, Download, AlertCircle, Calendar, DollarSign, TrendingDown } from 'lucide-react';
+import { Download, AlertCircle } from 'lucide-react';
 
 export function MyPayslips() {
   const [payslips, setPayslips] = useState([]);
@@ -50,12 +51,12 @@ export function MyPayslips() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1F2A44]">My Payslips</h1>
-        <p className="text-sm text-[#6B7385]">View and download your monthly salary statements</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">My payslips</h1>
+        <p className="text-sm text-[var(--text-muted)] mt-1">View and download your monthly salary statements</p>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+        <div className="p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300 text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -70,40 +71,40 @@ export function MyPayslips() {
         <Card className="p-8">
           <EmptyState
             title="No payslips available"
-            description="Your payslips will appear here once official monthly payroll runs are finalized by Admin."
+            description="Your payslips will appear here once official monthly payroll runs are finalized by admin."
           />
         </Card>
       ) : (
         <div className="space-y-4">
           {payslips.map(({ runId, month, finalizedAt, payslip }) => (
-            <Card key={runId} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-[#12A087]">
+            <Card key={runId} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-[var(--primary)]">
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg text-[#1F2A44]">{month}</span>
-                  <span className="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-semibold">
-                    Finalized
-                  </span>
+                <div className="flex items-center gap-2.5">
+                  <span className="font-semibold text-base text-[var(--text)]">{month}</span>
+                  <StatusBadge status="finalized" />
                 </div>
-                <p className="text-xs text-[#6B7385]">
-                  Basic: PKR {payslip.basicSalary?.toLocaleString()} • Gross: PKR {payslip.grossSalary?.toLocaleString()} • Working Days: {payslip.workingDaysInMonth}
+                <p className="text-xs text-[var(--text-muted)] font-mono tabular-nums">
+                  Basic: PKR {payslip.basicSalary?.toLocaleString()} • Gross: PKR {payslip.grossSalary?.toLocaleString()} • Working days: {payslip.workingDaysInMonth}
                 </p>
-                <div className="flex items-center gap-4 text-xs text-[#6B7385] pt-1">
-                  <span>Deductions: <strong className="text-red-600">-PKR {payslip.deductionAmount?.toLocaleString() || '0'}</strong></span>
-                  <span>Tax: <strong className="text-[#6B7385]">PKR {payslip.monthlyTax?.toLocaleString() || '0'}</strong></span>
+                <div className="flex items-center gap-4 text-xs text-[var(--text-muted)] pt-1 font-mono tabular-nums">
+                  <span>Deductions: <strong className="text-rose-600 dark:text-rose-400 font-medium">-PKR {payslip.deductionAmount?.toLocaleString() || '0'}</strong></span>
+                  <span>Tax: <strong>PKR {payslip.monthlyTax?.toLocaleString() || '0'}</strong></span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between md:justify-end gap-6 pt-3 md:pt-0 border-t md:border-t-0 border-[#E3E7EE]">
+              <div className="flex items-center justify-between md:justify-end gap-6 pt-3 md:pt-0 border-t md:border-t-0 border-[var(--border)]">
                 <div className="text-left md:text-right">
-                  <span className="text-[11px] uppercase font-bold text-[#6B7385] block">Net Take-Home Pay</span>
-                  <span className="text-2xl font-extrabold text-[#12A087]">
+                  <span className="text-xs font-medium text-[var(--text-muted)] block">Net take-home pay</span>
+                  <span className="text-xl font-semibold text-[var(--primary)] font-mono tabular-nums">
                     PKR {payslip.netSalary?.toLocaleString()}
                   </span>
                 </div>
 
                 <Button
+                  variant="secondary"
+                  size="sm"
                   onClick={() => handleDownload(runId, payslip.employeeId, month)}
-                  className="flex items-center gap-2 bg-[#1F2A44] hover:bg-[#151D30] text-white"
+                  className="flex items-center gap-2"
                 >
                   <Download className="w-4 h-4" />
                   <span>Download PDF</span>

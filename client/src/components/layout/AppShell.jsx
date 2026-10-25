@@ -90,11 +90,11 @@ export function AppShell() {
     { label: 'Attendance', to: '/attendance', icon: CalendarCheck, roles: ['admin', 'hr', 'employee'] },
     { label: 'Leave', to: '/leave', icon: CalendarDays, roles: ['admin', 'hr', 'employee'] },
     { label: 'Payroll', to: '/payroll', icon: CircleDollarSign, roles: ['admin', 'hr'] },
-    { label: 'My Payslips', to: '/payslips', icon: CircleDollarSign, roles: ['employee'] },
+    { label: 'My payslips', to: '/payslips', icon: CircleDollarSign, roles: ['employee'] },
     { label: 'Organization', to: '/org', icon: Building, roles: ['admin', 'hr'] },
-    { label: 'Users & Logins', to: '/users', icon: UserCheck, roles: ['admin'] },
+    { label: 'Users and logins', to: '/users', icon: UserCheck, roles: ['admin'] },
     { label: 'Announcements', to: '/announcements', icon: Megaphone, roles: ['admin', 'hr', 'employee'] },
-    { label: 'Audit Log', to: '/audit', icon: ShieldAlert, roles: ['admin'] }
+    { label: 'Audit log', to: '/audit', icon: ShieldAlert, roles: ['admin'] }
   ].filter((item) => item.roles.includes(role));
 
   return (
@@ -103,7 +103,7 @@ export function AppShell() {
       <aside className="hidden md:flex flex-col w-[232px] bg-[var(--surface)] border-r border-[var(--border)] shrink-0 transition-colors">
         {/* Brand Header */}
         <div className="h-16 flex items-center px-5 border-b border-[var(--border)] gap-2.5">
-          <div className="w-6 h-6 rounded-md bg-[#0E8F7A] flex items-center justify-center font-bold text-white text-xs select-none">
+          <div className="w-6 h-6 rounded-md bg-[var(--primary)] flex items-center justify-center font-bold text-white text-xs select-none">
             ▣
           </div>
           <span className="font-semibold text-base text-[var(--text)] tracking-tight">HCM Lite</span>
@@ -121,7 +121,7 @@ export function AppShell() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isActive
-                      ? 'bg-[var(--primary-soft)] text-[#0E8F7A] font-medium'
+                      ? 'bg-[var(--primary-soft)] text-[var(--primary)] font-medium'
                       : 'text-[var(--text-muted)] hover:bg-[var(--bg)] hover:text-[var(--text)] font-normal'
                   }`
                 }
@@ -181,7 +181,7 @@ export function AppShell() {
             {/* AI Assistant shortcut */}
             <button
               onClick={() => setShowAiChat(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-[#5B4FCF] text-[#5B4FCF] hover:bg-[#EFEDFB] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--ai)] text-[var(--ai)] hover:bg-[var(--ai-soft)] transition-colors cursor-pointer"
             >
               <span>✦ Ask AI</span>
             </button>
@@ -195,7 +195,7 @@ export function AppShell() {
               >
                 <Bell className="w-4 h-4 stroke-[1.75]" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C23B3B]" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[var(--danger)]" />
                 )}
               </button>
 
@@ -208,7 +208,7 @@ export function AppShell() {
                     {unreadCount > 0 && (
                       <button
                         onClick={handleMarkAllRead}
-                        className="text-[11px] text-[#0E8F7A] font-medium hover:underline"
+                        className="text-[11px] text-[var(--primary)] font-medium hover:underline"
                       >
                         Mark all read
                       </button>
@@ -257,7 +257,7 @@ export function AppShell() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${
-                      isActive ? 'bg-[var(--primary-soft)] text-[#0E8F7A] font-medium' : 'text-[var(--text-muted)] hover:bg-[var(--bg)] font-normal'
+                      isActive ? 'bg-[var(--primary-soft)] text-[var(--primary)] font-medium' : 'text-[var(--text-muted)] hover:bg-[var(--bg)] font-normal'
                     }`
                   }
                 >
@@ -268,7 +268,7 @@ export function AppShell() {
             })}
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[#C23B3B] font-medium"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[var(--danger)] font-medium"
             >
               <LogOut className="w-5 h-5 stroke-[1.75]" />
               <span>Log out</span>

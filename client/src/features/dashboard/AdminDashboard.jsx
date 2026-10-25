@@ -40,77 +40,73 @@ export function AdminDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2A44]">Admin Executive Dashboard</h1>
-          <p className="text-sm text-[#6B7385]">
-            Company-wide workforce health, payroll liabilities, and operational attendance
+          <h1 className="text-2xl font-semibold text-[var(--text)] leading-8">Admin dashboard</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">
+            Workforce health, payroll liabilities, and operational attendance overview.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchDashboard} className="flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" />
+        <Button variant="secondary" size="sm" onClick={fetchDashboard} className="flex items-center gap-1.5 h-9">
+          <RefreshCw className="w-4 h-4 stroke-[1.75]" />
           <span>Refresh</span>
         </Button>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-xs text-[var(--danger)]">
           {error}
         </div>
       )}
 
-      {/* KPI Cards */}
+      {/* KPI Cards (No icons, sentence case, 28px/36px tabular numbers, 1px border) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i} className="p-5 space-y-2">
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-8 w-20" />
-            </Card>
+            <div key={i} className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 space-y-3 animate-pulse">
+              <div className="h-4 bg-[var(--bg)] rounded w-28" />
+              <div className="h-8 bg-[var(--bg)] rounded w-20" />
+            </div>
           ))
         ) : (
           <>
-            <Card className="p-5 border-l-4 border-l-[#12A087]">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Total Headcount</span>
-                <Users className="w-4 h-4 text-[#12A087]" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Total headcount</span>
+              <div className="my-2.5">
+                <span className="text-[28px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.headcount ?? 0}
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.kpis?.headcount ?? 0}
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">Active & on probation</span>
-            </Card>
+              <span className="text-xs text-[var(--text-muted)] leading-4">Active and probation</span>
+            </div>
 
-            <Card className="p-5 border-l-4 border-l-blue-500">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Attendance Rate</span>
-                <CalendarCheck className="w-4 h-4 text-blue-500" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Attendance rate</span>
+              <div className="my-2.5">
+                <span className="text-[28px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.attendanceRate ?? 100}%
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.kpis?.attendanceRate ?? 100}%
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">Present, late & half-days</span>
-            </Card>
+              <span className="text-xs text-[var(--text-muted)] leading-4">Present and half days</span>
+            </div>
 
-            <Card className="p-5 border-l-4 border-l-purple-500">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Monthly Payroll</span>
-                <CircleDollarSign className="w-4 h-4 text-purple-500" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Monthly payroll cost</span>
+              <div className="my-2.5">
+                <span className="text-[24px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight truncate">
+                  PKR {data?.kpis?.payrollCost?.toLocaleString() ?? 0}
+                </span>
               </div>
-              <div className="mt-2 text-2xl font-extrabold text-[#1F2A44]">
-                PKR {data?.kpis?.payrollCost?.toLocaleString() ?? 0}
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">Net disbursement</span>
-            </Card>
+              <span className="text-xs text-[var(--text-muted)] leading-4">Net disbursement</span>
+            </div>
 
-            <Card className="p-5 border-l-4 border-l-amber-500">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Attrition Rate</span>
-                <TrendingUp className="w-4 h-4 text-amber-500" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Attrition rate (YTD)</span>
+              <div className="my-2.5">
+                <span className="text-[28px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.attritionRate ?? 0}%
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.kpis?.attritionRate ?? 0}%
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">Exits / avg headcount</span>
-            </Card>
+              <span className="text-xs text-[var(--text-muted)] leading-4">Exits vs average headcount</span>
+            </div>
           </>
         )}
       </div>
@@ -119,10 +115,10 @@ export function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Payroll by Department */}
         <Card className="p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E3E7EE]">
-            <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider flex items-center gap-2">
-              <Building className="w-4 h-4 text-[#12A087]" />
-              <span>Payroll Cost by Department</span>
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+            <h2 className="text-sm font-semibold text-[var(--text)] flex items-center gap-2">
+              <Building className="w-4 h-4 text-[var(--primary)] stroke-[1.75]" />
+              <span>Payroll cost by department</span>
             </h2>
           </div>
 
@@ -132,20 +128,20 @@ export function AdminDashboard() {
               <Skeleton className="h-8 w-full" />
             </div>
           ) : !data?.payrollSummary?.byDepartment?.length ? (
-            <div className="p-8 text-center text-xs text-[#6B7385]">
+            <div className="p-8 text-center text-xs text-[var(--text-muted)]">
               No finalized payroll data available yet.
             </div>
           ) : (
-            <div className="divide-y divide-[#E3E7EE] mt-3">
+            <div className="divide-y divide-[var(--border)] mt-3">
               {data.payrollSummary.byDepartment.map((dept) => (
                 <div key={dept.department} className="py-2.5 flex items-center justify-between text-sm">
                   <div>
-                    <span className="font-semibold text-[#1F2A44]">{dept.department}</span>
-                    <span className="text-xs text-[#6B7385] block">{dept.count} employees</span>
+                    <span className="font-medium text-[var(--text)]">{dept.department}</span>
+                    <span className="text-xs text-[var(--text-muted)] block">{dept.count} employees</span>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-[#1F2A44]">PKR {dept.net?.toLocaleString()}</span>
-                    <span className="text-[11px] text-[#6B7385] block">Avg: PKR {dept.averageSalary?.toLocaleString()}</span>
+                    <span className="font-semibold text-[var(--text)] tabular-nums">PKR {dept.net?.toLocaleString()}</span>
+                    <span className="text-[11px] text-[var(--text-muted)] block tabular-nums">Avg: PKR {dept.averageSalary?.toLocaleString()}</span>
                   </div>
                 </div>
               ))}
@@ -155,10 +151,10 @@ export function AdminDashboard() {
 
         {/* Top Late-Comers */}
         <Card className="p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E3E7EE]">
-            <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
-              <span>Top Frequent Late-Comers</span>
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+            <h2 className="text-sm font-semibold text-[var(--text)] flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 stroke-[1.75]" />
+              <span>Top frequent late-comers</span>
             </h2>
           </div>
 
@@ -168,24 +164,24 @@ export function AdminDashboard() {
               <Skeleton className="h-8 w-full" />
             </div>
           ) : !data?.topLateComers?.length ? (
-            <div className="p-8 text-center text-xs text-emerald-600 font-medium">
-              Excellent! No late arrivals recorded in this period.
+            <div className="p-8 text-center text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+              No late arrivals recorded in this period.
             </div>
           ) : (
-            <div className="divide-y divide-[#E3E7EE] mt-3">
+            <div className="divide-y divide-[var(--border)] mt-3">
               {data.topLateComers.map((item, idx) => (
                 <div key={item._id} className="py-2.5 flex items-center justify-between text-sm">
                   <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-[#1F2A44]">
+                    <span className="w-6 h-6 rounded-full bg-[var(--bg)] flex items-center justify-center text-xs font-semibold text-[var(--text)] select-none">
                       {idx + 1}
                     </span>
                     <div>
-                      <span className="font-semibold text-[#1F2A44]">{item.employeeName}</span>
-                      <span className="text-xs text-[#6B7385] block">{item.employeeCode}</span>
+                      <span className="font-medium text-[var(--text)]">{item.employeeName}</span>
+                      <span className="text-xs text-[var(--text-muted)] block">{item.employeeCode}</span>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-amber-50 text-amber-700 font-bold text-xs">
-                    {item.lateCount} times late
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-medium text-xs border border-amber-200 dark:border-amber-800/30">
+                    <span className="tabular-nums font-mono">{item.lateCount}</span> times late
                   </span>
                 </div>
               ))}
@@ -196,8 +192,8 @@ export function AdminDashboard() {
 
       {/* Leave Utilization Breakdown */}
       <Card className="p-5">
-        <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider pb-3 border-b border-[#E3E7EE]">
-          Leave Type Utilization
+        <h2 className="text-sm font-semibold text-[var(--text)] pb-3 border-b border-[var(--border)]">
+          Leave type utilization
         </h2>
 
         {loading ? (
@@ -208,12 +204,12 @@ export function AdminDashboard() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-4">
             {data?.leaveUtilization?.map((lt) => (
-              <div key={lt.key} className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-xs font-semibold text-[#6B7385] uppercase">{lt.name}</span>
-                <div className="text-xl font-bold text-[#1F2A44] mt-1">
+              <div key={lt.key} className="p-3 bg-[var(--bg)] rounded-lg border border-[var(--border)]">
+                <span className="text-xs font-medium text-[var(--text-muted)] capitalize">{lt.name}</span>
+                <div className="text-xl font-semibold text-[var(--text)] tabular-nums mt-1">
                   {lt.approvedDays}d {lt.yearlyQuota ? `/ ${lt.yearlyQuota}d` : ''}
                 </div>
-                <div className="text-xs text-[#6B7385] mt-1">
+                <div className="text-xs text-[var(--text-muted)] mt-1 tabular-nums">
                   {lt.utilizationRate !== null ? `${lt.utilizationRate}% utilized` : 'Unlimited quota'}
                 </div>
               </div>

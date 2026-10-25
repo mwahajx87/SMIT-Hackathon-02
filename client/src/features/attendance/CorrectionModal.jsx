@@ -38,10 +38,10 @@ export function CorrectionModal({ isOpen, onClose, defaultDate, onSuccess }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Request Attendance Correction">
+    <Modal isOpen={isOpen} onClose={onClose} title="Request attendance correction">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="p-3 bg-[#D64545]/10 text-[#D64545] rounded-lg text-xs font-medium">
+          <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-medium">
             {error}
           </div>
         )}
@@ -52,38 +52,38 @@ export function CorrectionModal({ isOpen, onClose, defaultDate, onSuccess }) {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+            className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           />
         </FormField>
 
         <div className="grid grid-cols-2 gap-3">
-          <FormField label="Requested Check-in">
+          <FormField label="Requested check-in">
             <input
               type="time"
               value={requestedCheckIn}
               onChange={(e) => setRequestedCheckIn(e.target.value)}
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
           </FormField>
 
-          <FormField label="Requested Check-out">
+          <FormField label="Requested check-out">
             <input
               type="time"
               value={requestedCheckOut}
               onChange={(e) => setRequestedCheckOut(e.target.value)}
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
           </FormField>
         </div>
 
-        <FormField label="Reason for Correction" required helperText="e.g. Forgot badge / System issue">
+        <FormField label="Reason for correction" required helperText="e.g. Forgot badge / System issue">
           <textarea
             rows={3}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             required
             placeholder="Explain why a manual correction is required..."
-            className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+            className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           />
         </FormField>
 
@@ -92,7 +92,7 @@ export function CorrectionModal({ isOpen, onClose, defaultDate, onSuccess }) {
             Cancel
           </Button>
           <Button type="submit" loading={loading}>
-            Submit Request
+            Submit request
           </Button>
         </div>
       </form>

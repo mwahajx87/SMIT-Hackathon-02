@@ -75,25 +75,25 @@ export function EmployeeDashboard() {
               ) : announcements.length > 0 ? (
                 announcements.map((ann, idx) => (
                   <div key={ann._id || idx} className="text-xs text-[var(--text-muted)] flex items-start gap-2">
-                    <span className="text-[#0E8F7A] font-bold select-none">•</span>
+                    <span className="text-[var(--primary)] font-bold select-none">•</span>
                     <span className="leading-5 line-clamp-2 text-[var(--text)]">{ann.title || ann.message}</span>
                   </div>
                 ))
               ) : (
                 <div className="space-y-2 text-xs text-[var(--text-muted)]">
                   <div className="flex items-start gap-2">
-                    <span className="text-[#0E8F7A] font-bold select-none">•</span>
+                    <span className="text-[var(--primary)] font-bold select-none">•</span>
                     <span className="leading-5">Company payroll cut-off on 25th</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="text-[#0E8F7A] font-bold select-none">•</span>
+                    <span className="text-[var(--primary)] font-bold select-none">•</span>
                     <span className="leading-5">Annual leave requests open for next month</span>
                   </div>
                 </div>
               )}
             </div>
             <div className="pt-4 border-t border-[var(--border)] mt-4">
-              <Link to="/announcements" className="text-xs font-medium text-[#0E8F7A] hover:underline">
+              <Link to="/announcements" className="text-xs font-medium text-[var(--primary)] hover:underline">
                 View all announcements →
               </Link>
             </div>
@@ -114,7 +114,7 @@ export function EmployeeDashboard() {
           {/* Progress bar */}
           <div className="w-full bg-[var(--bg)] rounded-full h-1.5 overflow-hidden">
             <div 
-              className="bg-[#0E8F7A] h-1.5 rounded-full transition-all" 
+              className="bg-[var(--primary)] h-1.5 rounded-full transition-all" 
               style={{ width: `${progressPercent}%` }} 
             />
           </div>
@@ -139,7 +139,7 @@ export function EmployeeDashboard() {
               {data?.sickLeaveBalance ?? '8'} <span className="text-base font-normal text-[var(--text-muted)]">days</span>
             </span>
           </div>
-          <Link to="/leave" className="text-xs text-[#0E8F7A] hover:underline leading-4">
+          <Link to="/leave" className="text-xs text-[var(--primary)] hover:underline leading-4">
             Apply for leave
           </Link>
         </div>

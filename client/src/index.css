@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #0E8F7A;
+  --color-primary-hover: #0B7664;
+  --color-primary-soft: #E7F5F2;
+  --color-bg: #F7F8FA;
+  --color-surface: #FFFFFF;
+  --color-border: #E4E7EC;
+  --color-text: #1D2433;
+  --color-text-muted: #667085;
+  --color-ai: #5B4FCF;
+  --color-ai-soft: #EFEDFB;
+  --color-success: #1E8E4F;
+  --color-success-soft: #E6F4EC;
+  --color-warning: #B76E00;
+  --color-warning-soft: #FFF3DC;
+  --color-danger: #C23B3B;
+  --color-danger-soft: #FBE9E9;
+  --color-info: #2563A8;
+  --color-info-soft: #E8F0FA;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 :root {
   --bg: #F7F8FA;
   --surface: #FFFFFF;
@@ -77,6 +99,55 @@ a:focus-visible {
   box-shadow: var(--shadow-dropdown);
 }
 
+/* Form inputs & controls default styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  border-color: var(--border);
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary) !important;
+  outline: none;
+}
+
+/* Remap legacy hardcoded colors across all components to design.md tokens */
+.text-\[\#1F2A44\] { color: var(--text) !important; }
+.text-\[\#6B7385\] { color: var(--text-muted) !important; }
+.text-\[\#12A087\] { color: var(--primary) !important; }
+.text-\[\#D64545\] { color: var(--danger) !important; }
+.text-\[\#2E9E5B\] { color: var(--success) !important; }
+.text-\[\#E9962B\] { color: var(--warning) !important; }
+.text-\[\#5B4FCF\] { color: var(--ai) !important; }
+
+.bg-\[\#F5F7FA\] { background-color: var(--bg) !important; }
+.bg-\[\#12A087\] { background-color: var(--primary) !important; }
+.bg-\[\#12A087\]\/10 { background-color: var(--primary-soft) !important; }
+.bg-\[\#12A087\]\/5 { background-color: var(--primary-soft) !important; }
+.bg-\[\#0E8F7A\]\/10 { background-color: var(--primary-soft) !important; }
+.bg-\[\#5B4FCF\]\/10 { background-color: var(--ai-soft) !important; }
+.bg-\[\#D64545\]\/10 { background-color: var(--danger-soft) !important; }
+.bg-\[\#2E9E5B\]\/10 { background-color: var(--success-soft) !important; }
+.bg-\[\#E9962B\]\/10 { background-color: var(--warning-soft) !important; }
+
+.border-\[\#E3E7EE\] { border-color: var(--border) !important; }
+.border-\[\#12A087\] { border-color: var(--primary) !important; }
+.border-\[\#D64545\] { border-color: var(--danger) !important; }
+.border-\[\#2E9E5B\] { border-color: var(--success) !important; }
+.border-\[\#E9962B\] { border-color: var(--warning) !important; }
+
+.focus\:ring-\[\#12A087\]:focus { --tw-ring-color: var(--primary) !important; }
+.hover\:bg-\[\#0f8872\]:hover { background-color: var(--primary-hover) !important; }
+
 /* Custom dark mode helper rules */
 [data-theme="dark"] .bg-white {
   background-color: var(--surface) !important;
@@ -99,4 +170,5 @@ a:focus-visible {
   color: var(--text) !important;
   border-color: var(--border) !important;
 }
+
 

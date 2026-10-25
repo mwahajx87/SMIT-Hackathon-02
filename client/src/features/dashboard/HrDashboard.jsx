@@ -52,19 +52,19 @@ export function HrDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2A44]">HR Operations Dashboard</h1>
-          <p className="text-sm text-[#6B7385]">
-            Track employee attendance, late arrivals, on-time rates, and leave quotas
+          <h1 className="text-2xl font-semibold text-[var(--text)] leading-8">HR dashboard</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">
+            Workforce attendance, absenteeism, leave quotas, and operational trends.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <select
             value={departmentId}
             onChange={(e) => setDepartmentId(e.target.value)}
-            className="px-3 py-1.5 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+            className="h-9 px-3 border border-[var(--border)] rounded-lg text-xs bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           >
-            <option value="">All Departments</option>
+            <option value="">All departments</option>
             {data?.departments?.map((d) => (
               <option key={d._id} value={d._id}>
                 {d.name}
@@ -73,7 +73,7 @@ export function HrDashboard() {
           </select>
 
           <Button
-            variant="outline"
+            variant="ai"
             size="sm"
             onClick={async () => {
               if (!data) return;
@@ -91,99 +91,107 @@ export function HrDashboard() {
               }
             }}
             disabled={summarizing}
-            className="flex items-center gap-1.5 text-[#5B4FCF] border-[#5B4FCF]/30 hover:bg-[#5B4FCF]/10"
+            className="flex items-center gap-1.5 h-9"
           >
-            <Sparkles className="w-4 h-4" />
-            <span>{summarizing ? 'Summarizing...' : 'AI Summary'}</span>
+            <span>{summarizing ? '✦ Summarizing...' : '✦ Summarize'}</span>
           </Button>
 
-          <Button variant="outline" size="sm" onClick={fetchDashboard} className="flex items-center gap-2">
-            <RefreshCw className="w-4 h-4" />
+          <Button variant="secondary" size="sm" onClick={fetchDashboard} className="flex items-center gap-1.5 h-9">
+            <RefreshCw className="w-4 h-4 stroke-[1.75]" />
             <span>Refresh</span>
           </Button>
         </div>
       </div>
 
+      {/* AI Summary card with AI-generated badge and caption */}
       {aiSummary && (
-        <Card className="p-4 bg-[#5B4FCF]/5 border border-[#5B4FCF]/20 relative">
-          <div className="flex items-center justify-between pb-2 border-b border-[#5B4FCF]/10">
-            <span className="text-xs font-bold text-[#5B4FCF] uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>AI Executive Summary</span>
-            </span>
+        <div className="p-4 bg-[var(--surface)] rounded-xl border border-[var(--ai)]/30 relative transition-colors">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-[var(--ai-soft)] text-[var(--ai)]">
+                AI-generated
+              </span>
+              <span className="text-xs text-[var(--text-muted)]">Based on the current filters</span>
+            </div>
             <button
               onClick={() => setAiSummary(null)}
-              className="text-xs text-gray-400 hover:text-gray-600 font-semibold"
+              className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] font-medium"
             >
               Dismiss
             </button>
           </div>
-          <div className="mt-2 text-xs text-[#1F2A44] whitespace-pre-line leading-relaxed">
+          <div className="mt-2.5 text-xs text-[var(--text)] whitespace-pre-line leading-relaxed">
             {aiSummary}
           </div>
-        </Card>
+        </div>
       )}
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-xs text-[var(--danger)]">
           {error}
         </div>
       )}
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI Cards (5 columns per Section 5: Headcount | Present | On leave | Late | Pending approvals) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i} className="p-5 space-y-2">
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-8 w-20" />
-            </Card>
+          Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 space-y-2 animate-pulse">
+              <div className="h-3 bg-[var(--bg)] rounded w-20" />
+              <div className="h-7 bg-[var(--bg)] rounded w-16" />
+            </div>
           ))
         ) : (
           <>
-            <Card className="p-5 border-l-4 border-l-[#12A087]">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Active Headcount</span>
-                <Users className="w-4 h-4 text-[#12A087]" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Headcount</span>
+              <div className="my-2">
+                <span className="text-[26px] leading-[32px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.headcount ?? 0}
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.kpis?.headcount ?? 0}
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">In selected scope</span>
-            </Card>
+              <span className="text-[11px] text-[var(--text-muted)]">In selected scope</span>
+            </div>
 
-            <Card className="p-5 border-l-4 border-l-emerald-500">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Attendance Rate</span>
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Present</span>
+              <div className="my-2">
+                <span className="text-[26px] leading-[32px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.presentCount ?? data?.kpis?.headcount ?? 0}
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.kpis?.attendanceRate ?? 100}%
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">Present, late & half-day</span>
-            </Card>
+              <span className="text-[11px] text-[var(--text-muted)]">On time & late</span>
+            </div>
 
-            <Card className="p-5 border-l-4 border-l-amber-500">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Late Arrival %</span>
-                <Clock className="w-4 h-4 text-amber-500" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">On leave</span>
+              <div className="my-2">
+                <span className="text-[26px] leading-[32px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.onLeaveCount ?? 0}
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.kpis?.latePercentage ?? 0}%
-              </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">Arrived after 09:15 AM</span>
-            </Card>
+              <span className="text-[11px] text-[var(--text-muted)]">Approved leave</span>
+            </div>
 
-            <Card className="p-5 border-l-4 border-l-blue-500">
-              <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                <span>Total Present</span>
-                <CalendarCheck className="w-4 h-4 text-blue-500" />
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Late</span>
+              <div className="my-2">
+                <span className="text-[26px] leading-[32px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.lateCount ?? 0}
+                </span>
               </div>
-              <div className="mt-2 text-3xl font-extrabold text-[#1F2A44]">
-                {data?.attendance?.present ?? 0}
+              <span className="text-[11px] text-[var(--text-muted)]">After 09:15 AM</span>
+            </div>
+
+            <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 flex flex-col justify-between">
+              <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Pending approvals</span>
+              <div className="my-2">
+                <span className="text-[26px] leading-[32px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+                  {data?.kpis?.pendingApprovals ?? 0}
+                </span>
               </div>
-              <span className="text-xs text-[#6B7385] mt-1 block">On-time attendances</span>
-            </Card>
+              <span className="text-[11px] text-[var(--text-muted)]">Requires review</span>
+            </div>
           </>
         )}
       </div>
@@ -192,8 +200,8 @@ export function HrDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Attendance Breakdown */}
         <Card className="p-5">
-          <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider pb-3 border-b border-[#E3E7EE]">
-            Attendance Breakdown (Selected Scope)
+          <h2 className="text-sm font-semibold text-[var(--text)] pb-3 border-b border-[var(--border)]">
+            Attendance breakdown
           </h2>
 
           {loading ? (
@@ -203,21 +211,21 @@ export function HrDashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-lg">
-                <span className="text-xs font-semibold text-emerald-800 uppercase">Present (On-Time)</span>
-                <div className="text-2xl font-bold text-emerald-700 mt-1">{data?.attendance?.present ?? 0}</div>
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900 rounded-lg">
+                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">Present (on-time)</span>
+                <div className="text-2xl font-semibold text-emerald-700 dark:text-emerald-300 mt-1 tabular-nums">{data?.attendance?.present ?? 0}</div>
               </div>
-              <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
-                <span className="text-xs font-semibold text-amber-800 uppercase">Late Arrivals</span>
-                <div className="text-2xl font-bold text-amber-700 mt-1">{data?.attendance?.late ?? 0}</div>
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900 rounded-lg">
+                <span className="text-xs font-medium text-amber-700 dark:text-amber-300">Late arrivals</span>
+                <div className="text-2xl font-semibold text-amber-700 dark:text-amber-300 mt-1 tabular-nums">{data?.attendance?.late ?? 0}</div>
               </div>
-              <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                <span className="text-xs font-semibold text-blue-800 uppercase">Half-Days (&lt;5h)</span>
-                <div className="text-2xl font-bold text-blue-700 mt-1">{data?.attendance?.halfDay ?? 0}</div>
+              <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 rounded-lg">
+                <span className="text-xs font-medium text-blue-700 dark:text-blue-300">Half-days (&lt;5h)</span>
+                <div className="text-2xl font-semibold text-blue-700 dark:text-blue-300 mt-1 tabular-nums">{data?.attendance?.halfDay ?? 0}</div>
               </div>
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                <span className="text-xs font-semibold text-[#6B7385] uppercase">Missing Checkout</span>
-                <div className="text-2xl font-bold text-[#1F2A44] mt-1">{data?.attendance?.missingCheckout ?? 0}</div>
+              <div className="p-3 bg-[var(--surface-muted)] border border-[var(--border)] rounded-lg">
+                <span className="text-xs font-medium text-[var(--text-muted)]">Missing checkout</span>
+                <div className="text-2xl font-semibold text-[var(--text)] mt-1 tabular-nums">{data?.attendance?.missingCheckout ?? 0}</div>
               </div>
             </div>
           )}
@@ -225,9 +233,9 @@ export function HrDashboard() {
 
         {/* Top 5 Late Comers */}
         <Card className="p-5">
-          <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider pb-3 border-b border-[#E3E7EE] flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[var(--text)] pb-3 border-b border-[var(--border)] flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-500" />
-            <span>Top 5 Late-Comers</span>
+            <span>Top 5 late-comers</span>
           </h2>
 
           {loading ? (
@@ -236,24 +244,24 @@ export function HrDashboard() {
               <Skeleton className="h-8 w-full" />
             </div>
           ) : !data?.topLateComers?.length ? (
-            <div className="p-8 text-center text-xs text-emerald-600 font-medium">
+            <div className="p-8 text-center text-xs text-emerald-600 dark:text-emerald-400 font-medium">
               No late arrivals recorded in this period.
             </div>
           ) : (
-            <div className="divide-y divide-[#E3E7EE] mt-3">
+            <div className="divide-y divide-[var(--border)] mt-3">
               {data.topLateComers.map((item, idx) => (
                 <div key={item._id} className="py-2.5 flex items-center justify-between text-sm">
                   <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-[#1F2A44]">
+                    <span className="w-6 h-6 rounded-full bg-[var(--surface-muted)] flex items-center justify-center text-xs font-medium text-[var(--text)]">
                       {idx + 1}
                     </span>
                     <div>
-                      <span className="font-semibold text-[#1F2A44]">{item.employeeName}</span>
-                      <span className="text-xs text-[#6B7385] block">{item.employeeCode}</span>
+                      <span className="font-medium text-[var(--text)]">{item.employeeName}</span>
+                      <span className="text-xs text-[var(--text-muted)] block">{item.employeeCode}</span>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-amber-50 text-amber-700 font-bold text-xs">
-                    {item.lateCount} times late
+                  <span className="px-2.5 py-1 rounded bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-medium text-xs tabular-nums">
+                    {item.lateCount}× late
                   </span>
                 </div>
               ))}
@@ -264,8 +272,8 @@ export function HrDashboard() {
 
       {/* Leave Utilization Breakdown */}
       <Card className="p-5">
-        <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider pb-3 border-b border-[#E3E7EE]">
-          Department Leave Utilization
+        <h2 className="text-sm font-semibold text-[var(--text)] pb-3 border-b border-[var(--border)]">
+          Leave utilization by type
         </h2>
 
         {loading ? (
@@ -275,12 +283,12 @@ export function HrDashboard() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-4">
             {data?.leaveUtilization?.map((lt) => (
-              <div key={lt.key} className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-xs font-semibold text-[#6B7385] uppercase">{lt.name}</span>
-                <div className="text-xl font-bold text-[#1F2A44] mt-1">
+              <div key={lt.key} className="p-3 bg-[var(--surface-muted)] rounded-lg">
+                <span className="text-xs font-medium text-[var(--text-muted)]">{lt.name}</span>
+                <div className="text-xl font-semibold text-[var(--text)] mt-1 tabular-nums">
                   {lt.approvedDays}d {lt.yearlyQuota ? `/ ${lt.yearlyQuota}d` : ''}
                 </div>
-                <div className="text-xs text-[#6B7385] mt-1">
+                <div className="text-xs text-[var(--text-muted)] mt-1">
                   {lt.utilizationRate !== null ? `${lt.utilizationRate}% utilized` : 'Unlimited quota'}
                 </div>
               </div>
@@ -293,13 +301,13 @@ export function HrDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Absence Anomaly Flags */}
         <Card className="p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E3E7EE]">
-            <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider flex items-center gap-2">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+            <h2 className="text-sm font-semibold text-[var(--text)] flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-500" />
-              <span>Absence Anomaly Flags (Last 30 Days)</span>
+              <span>Absence anomaly flags (last 30 days)</span>
             </h2>
-            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-50 text-rose-700">
-              {anomalies.length} Flagged
+            <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 tabular-nums">
+              {anomalies.length} flagged
             </span>
           </div>
 
@@ -309,23 +317,23 @@ export function HrDashboard() {
               <Skeleton className="h-8 w-full" />
             </div>
           ) : anomalies.length === 0 ? (
-            <div className="p-8 text-center text-xs text-emerald-600 font-medium">
+            <div className="p-8 text-center text-xs text-emerald-600 dark:text-emerald-400 font-medium">
               ✓ No attendance anomalies detected across teams.
             </div>
           ) : (
-            <div className="divide-y divide-[#E3E7EE] mt-3 max-h-64 overflow-y-auto">
+            <div className="divide-y divide-[var(--border)] mt-3 max-h-64 overflow-y-auto">
               {anomalies.map((a) => (
                 <div key={a.employeeId} className="py-2.5 flex items-start justify-between gap-3 text-xs">
                   <div>
-                    <span className="font-bold text-[#1F2A44] block">{a.employeeName}</span>
-                    <span className="text-[#6B7385]">{a.employeeCode} • {a.department}</span>
-                    <p className="text-rose-600 font-medium mt-1">{a.reason}</p>
+                    <span className="font-medium text-[var(--text)] block">{a.employeeName}</span>
+                    <span className="text-[var(--text-muted)]">{a.employeeCode} · {a.department}</span>
+                    <p className="text-rose-600 dark:text-rose-400 font-medium mt-1">{a.reason}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 font-bold block">
-                      {a.absentDays} Absences
+                    <span className="px-2 py-1 rounded bg-rose-100 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 font-medium block tabular-nums">
+                      {a.absentDays} absences
                     </span>
-                    <span className="text-[10px] text-gray-500 mt-1 block">{a.lateDays} lates</span>
+                    <span className="text-[10px] text-[var(--text-muted)] mt-1 block tabular-nums">{a.lateDays} lates</span>
                   </div>
                 </div>
               ))}
@@ -335,12 +343,12 @@ export function HrDashboard() {
 
         {/* Attrition Risk Score */}
         <Card className="p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E3E7EE]">
-            <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider flex items-center gap-2">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+            <h2 className="text-sm font-semibold text-[var(--text)] flex items-center gap-2">
               <Clock className="w-4 h-4 text-indigo-500" />
-              <span>Attrition Risk Indicators</span>
+              <span>Attrition risk indicators</span>
             </h2>
-            <span className="text-xs text-[#6B7385]">Explainable Heuristic</span>
+            <span className="text-xs text-[var(--text-muted)]">Heuristic model</span>
           </div>
 
           {loading ? (
@@ -349,40 +357,40 @@ export function HrDashboard() {
               <Skeleton className="h-8 w-full" />
             </div>
           ) : attritionRisk.length === 0 ? (
-            <div className="p-8 text-center text-xs text-[#6B7385]">
+            <div className="p-8 text-center text-xs text-[var(--text-muted)]">
               No employee risk factors identified.
             </div>
           ) : (
-            <div className="divide-y divide-[#E3E7EE] mt-3 max-h-64 overflow-y-auto">
+            <div className="divide-y divide-[var(--border)] mt-3 max-h-64 overflow-y-auto">
               {attritionRisk.slice(0, 5).map((r) => (
                 <div key={r.employeeId} className="py-2.5 flex items-start justify-between gap-3 text-xs">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#1F2A44]">{r.employeeName}</span>
+                      <span className="font-medium text-[var(--text)]">{r.employeeName}</span>
                       <span
-                        className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                           r.riskLevel === 'High'
-                            ? 'bg-red-100 text-red-700'
+                            ? 'bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-300'
                             : r.riskLevel === 'Medium'
-                            ? 'bg-amber-100 text-amber-700'
-                            : 'bg-emerald-100 text-emerald-700'
+                            ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300'
+                            : 'bg-emerald-100 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300'
                         }`}
                       >
-                        {r.riskLevel} Risk
+                        {r.riskLevel} risk
                       </span>
                     </div>
-                    <span className="text-[#6B7385]">{r.employeeCode} • {r.department}</span>
+                    <span className="text-[var(--text-muted)]">{r.employeeCode} · {r.department}</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {r.factors?.map((f, i) => (
-                        <span key={i} className="px-1.5 py-0.5 bg-slate-100 rounded text-[10px] text-slate-600">
+                        <span key={i} className="px-1.5 py-0.5 bg-[var(--surface-muted)] rounded text-[10px] text-[var(--text-muted)]">
                           {f}
                         </span>
                       ))}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="text-base font-extrabold text-[#1F2A44]">{r.score}</span>
-                    <span className="text-[10px] text-[#6B7385] block">/ 100</span>
+                    <span className="text-base font-semibold text-[var(--text)] tabular-nums">{r.score}</span>
+                    <span className="text-[10px] text-[var(--text-muted)] block">/ 100</span>
                   </div>
                 </div>
               ))}

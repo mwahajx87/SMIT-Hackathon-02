@@ -48,58 +48,58 @@ export function ChangePassword() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-[#E9962B]/10 rounded-full text-[#E9962B] mb-2">
-            <KeyRound className="w-6 h-6" />
+    <div className="min-h-screen bg-[var(--bg)] flex flex-col justify-center items-center px-4 py-12 transition-colors">
+      <div className="w-full max-w-md space-y-6">
+        <div className="text-center">
+          <div className="w-10 h-10 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold mx-auto mb-3 select-none">
+            <KeyRound className="w-5 h-5 stroke-[1.75]" />
           </div>
-          <h1 className="text-xl font-bold text-[#1F2A44]">Change Temporary Password</h1>
-          <p className="text-xs text-[#6B7385] mt-1">
-            You must set a new secure password before accessing your account.
+          <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">Change password</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">
+            Set a new secure password before accessing your account.
           </p>
         </div>
 
         <Card>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 bg-[#D64545]/10 border border-[#D64545]/20 rounded-lg text-xs text-[#D64545]">
+              <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-xs text-[var(--danger)] font-normal">
                 {error}
               </div>
             )}
 
-            <FormField label="Current Password" required>
+            <FormField label="Current password" required>
               <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
-            <FormField label="New Password" required helperText="Minimum 6 characters">
+            <FormField label="New password" required helperText="Minimum 6 characters">
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
-            <FormField label="Confirm New Password" required>
+            <FormField label="Confirm new password" required>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </FormField>
 
-            <Button type="submit" loading={loading} className="w-full">
-              Update Password & Continue
+            <Button type="submit" loading={loading} className="w-full h-10 mt-2">
+              Save password
             </Button>
           </form>
         </Card>
@@ -107,3 +107,4 @@ export function ChangePassword() {
     </div>
   );
 }
+

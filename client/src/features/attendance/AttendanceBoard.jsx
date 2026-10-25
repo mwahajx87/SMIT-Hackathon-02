@@ -5,7 +5,6 @@ import { Button } from '../../components/ui/Button.jsx';
 import { StatusBadge } from '../../components/ui/StatusBadge.jsx';
 import { Modal } from '../../components/ui/Modal.jsx';
 import { FormField } from '../../components/ui/FormField.jsx';
-import { Calendar, Users, CheckCircle2, Clock, XCircle, Inbox } from 'lucide-react';
 
 export function AttendanceBoard() {
   const [tab, setTab] = useState('board'); // board | corrections
@@ -74,48 +73,48 @@ export function AttendanceBoard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-[#1F2A44]">Attendance Operations</h1>
-          <p className="text-xs text-[#6B7385] mt-1">
-            Real-time daily attendance board, status snapshots, and correction request inbox.
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">Attendance operations</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
+            Real-time daily attendance board, status snapshots, and correction request inbox
           </p>
         </div>
 
         {tab === 'board' && (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#6B7385]">Date:</span>
+            <span className="text-xs font-medium text-[var(--text-muted)]">Date:</span>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-1.5 border border-[#E3E7EE] rounded-lg text-sm bg-white"
+              className="px-3 py-1.5 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
           </div>
         )}
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#E3E7EE] gap-6 text-sm font-medium">
+      <div className="flex border-b border-[var(--border)] gap-6 text-sm font-medium">
         <button
           onClick={() => setTab('board')}
-          className={`pb-3 border-b-2 font-medium ${
+          className={`pb-3 border-b-2 font-medium transition-colors ${
             tab === 'board'
-              ? 'border-[#12A087] text-[#12A087]'
-              : 'border-transparent text-[#6B7385] hover:text-[#1F2A44]'
+              ? 'border-[var(--primary)] text-[var(--primary)]'
+              : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
         >
-          Daily Attendance Board
+          Daily attendance board
         </button>
         <button
           onClick={() => setTab('corrections')}
-          className={`pb-3 border-b-2 font-medium flex items-center gap-2 ${
+          className={`pb-3 border-b-2 font-medium flex items-center gap-2 transition-colors ${
             tab === 'corrections'
-              ? 'border-[#12A087] text-[#12A087]'
-              : 'border-transparent text-[#6B7385] hover:text-[#1F2A44]'
+              ? 'border-[var(--primary)] text-[var(--primary)]'
+              : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text)]'
           }`}
         >
-          <span>Corrections Inbox</span>
+          <span>Corrections inbox</span>
           {corrections.length > 0 && (
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-[#E9962B] text-white font-bold">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--warning-soft)] text-[var(--warning)] font-medium">
               {corrections.length}
             </span>
           )}
@@ -127,62 +126,62 @@ export function AttendanceBoard() {
         <div className="space-y-4">
           {/* Summary Chips */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-[#E3E7EE] text-center">
-              <span className="text-xs text-[#6B7385] block uppercase font-medium">Total Staff</span>
-              <span className="text-xl font-bold text-[#1F2A44]">{boardData.summary?.total}</span>
+            <div className="bg-[var(--surface)] p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-medium text-[var(--text-muted)] block">Total staff</span>
+              <span className="text-2xl font-semibold text-[var(--text)] mt-1 block font-mono tabular-nums">{boardData.summary?.total}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-[#2E9E5B]/20 text-center">
-              <span className="text-xs text-[#2E9E5B] block uppercase font-medium">Present</span>
-              <span className="text-xl font-bold text-[#2E9E5B]">{boardData.summary?.present}</span>
+            <div className="bg-[var(--surface)] p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-medium text-[var(--success)] block">Present</span>
+              <span className="text-2xl font-semibold text-[var(--success)] mt-1 block font-mono tabular-nums">{boardData.summary?.present}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-[#E9962B]/20 text-center">
-              <span className="text-xs text-[#E9962B] block uppercase font-medium">Late</span>
-              <span className="text-xl font-bold text-[#E9962B]">{boardData.summary?.late}</span>
+            <div className="bg-[var(--surface)] p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-medium text-[var(--warning)] block">Late</span>
+              <span className="text-2xl font-semibold text-[var(--warning)] mt-1 block font-mono tabular-nums">{boardData.summary?.late}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-[#E9962B]/20 text-center">
-              <span className="text-xs text-[#E9962B] block uppercase font-medium">Half Day</span>
-              <span className="text-xl font-bold text-[#E9962B]">{boardData.summary?.halfDay}</span>
+            <div className="bg-[var(--surface)] p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-medium text-[var(--warning)] block">Half day</span>
+              <span className="text-2xl font-semibold text-[var(--warning)] mt-1 block font-mono tabular-nums">{boardData.summary?.halfDay}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-xl border border-gray-200 text-center">
-              <span className="text-xs text-[#6B7385] block uppercase font-medium">Not In Yet</span>
-              <span className="text-xl font-bold text-[#6B7385]">{boardData.summary?.notCheckedIn}</span>
+            <div className="bg-[var(--surface)] p-4 rounded-xl border border-[var(--border)]">
+              <span className="text-xs font-medium text-[var(--text-muted)] block">Not in yet</span>
+              <span className="text-2xl font-semibold text-[var(--text-muted)] mt-1 block font-mono tabular-nums">{boardData.summary?.notCheckedIn}</span>
             </div>
           </div>
 
           {/* Table */}
-          <Card>
+          <Card className="overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-[#E3E7EE] text-left text-sm">
-                <thead className="bg-gray-50 text-xs font-semibold text-[#6B7385]">
+              <table className="min-w-full divide-y divide-[var(--border)] text-left text-sm">
+                <thead className="bg-[var(--surface-muted)] text-xs font-medium text-[var(--text-muted)]">
                   <tr>
                     <th className="px-4 py-3">Employee</th>
                     <th className="px-4 py-3">Department</th>
                     <th className="px-4 py-3">Check-in</th>
                     <th className="px-4 py-3">Check-out</th>
-                    <th className="px-4 py-3">Worked Duration</th>
+                    <th className="px-4 py-3">Worked duration</th>
                     <th className="px-4 py-3">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E3E7EE] text-[#1F2A44]">
+                <tbody className="divide-y divide-[var(--border)] text-[var(--text)]">
                   {boardData.items?.map((row) => (
-                    <tr key={row.employee.id} className="hover:bg-gray-50/50">
+                    <tr key={row.employee.id} className="hover:bg-[var(--surface-muted)]/50 transition-colors">
                       <td className="px-4 py-3">
-                        <span className="font-semibold block">{row.employee.name}</span>
-                        <span className="font-mono text-xs text-[#6B7385]">{row.employee.code}</span>
+                        <span className="font-medium block text-[var(--text)]">{row.employee.name}</span>
+                        <span className="font-mono text-xs text-[var(--text-muted)]">{row.employee.code}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-[#6B7385]">{row.employee.department}</td>
-                      <td className="px-4 py-3 font-mono text-xs">
+                      <td className="px-4 py-3 text-xs text-[var(--text-muted)]">{row.employee.department}</td>
+                      <td className="px-4 py-3 font-mono text-xs tabular-nums text-[var(--text)]">
                         {row.checkInAt
                           ? new Date(row.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                          : '-'}
+                          : '—'}
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs">
+                      <td className="px-4 py-3 font-mono text-xs tabular-nums text-[var(--text)]">
                         {row.checkOutAt
                           ? new Date(row.checkOutAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                          : '-'}
+                          : '—'}
                       </td>
-                      <td className="px-4 py-3 text-xs">
-                        {row.workedMinutes ? `${Math.floor(row.workedMinutes / 60)}h ${row.workedMinutes % 60}m` : '-'}
+                      <td className="px-4 py-3 text-xs font-mono tabular-nums text-[var(--text)]">
+                        {row.workedMinutes ? `${Math.floor(row.workedMinutes / 60)}h ${row.workedMinutes % 60}m` : '—'}
                       </td>
                       <td className="px-4 py-3">
                         <StatusBadge status={row.status} />
@@ -198,28 +197,28 @@ export function AttendanceBoard() {
 
       {/* Tab: Corrections Inbox */}
       {tab === 'corrections' && (
-        <Card title="Pending Attendance Corrections">
+        <Card title="Pending attendance corrections">
           {corrections.length === 0 ? (
-            <div className="p-8 text-center text-xs text-[#6B7385]">
+            <div className="p-8 text-center text-xs text-[var(--text-muted)]">
               No pending attendance correction requests to review.
             </div>
           ) : (
-            <div className="divide-y divide-[#E3E7EE]">
+            <div className="divide-y divide-[var(--border)]">
               {corrections.map((c) => (
                 <div key={c._id} className="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#1F2A44]">{c.employeeId?.name}</span>
-                      <span className="font-mono text-xs text-[#6B7385]">({c.employeeId?.code})</span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-gray-100 text-[#1F2A44]">
+                      <span className="font-medium text-[var(--text)]">{c.employeeId?.name}</span>
+                      <span className="font-mono text-xs text-[var(--text-muted)]">({c.employeeId?.code})</span>
+                      <span className="text-xs px-2 py-0.5 rounded bg-[var(--surface-muted)] text-[var(--text)] border border-[var(--border)]">
                         Date: {c.date}
                       </span>
                     </div>
-                    <p className="text-xs text-[#6B7385] mt-1">
+                    <p className="text-xs text-[var(--text-muted)] mt-1 font-mono tabular-nums">
                       Requested: {c.requestedCheckIn || '--:--'} to {c.requestedCheckOut || '--:--'}
                     </p>
-                    <p className="text-xs text-[#1F2A44] mt-1 bg-gray-50 p-2 rounded">
-                      <strong>Reason:</strong> {c.reason}
+                    <p className="text-xs text-[var(--text)] mt-1.5 bg-[var(--surface-muted)] p-2.5 rounded-lg border border-[var(--border)]">
+                      <strong className="text-[var(--text-muted)]">Reason:</strong> {c.reason}
                     </p>
                   </div>
 
@@ -249,11 +248,11 @@ export function AttendanceBoard() {
       <Modal
         isOpen={decisionModal.open}
         onClose={() => setDecisionModal({ open: false, id: null, status: 'approved' })}
-        title={`${decisionModal.status === 'approved' ? 'Approve' : 'Reject'} Correction Request`}
+        title={`${decisionModal.status === 'approved' ? 'Approve' : 'Reject'} correction request`}
       >
         <form onSubmit={handleDecide} className="space-y-4">
           <FormField
-            label="Decision Comment"
+            label="Decision comment"
             required
             helperText="A comment is required for the audit record."
           >
@@ -262,8 +261,8 @@ export function AttendanceBoard() {
               value={decisionComment}
               onChange={(e) => setDecisionComment(e.target.value)}
               required
-              placeholder="e.g. Approved as per manager request..."
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm"
+              placeholder="e.g. Approved as per manager confirmation..."
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             />
           </FormField>
 
@@ -280,7 +279,7 @@ export function AttendanceBoard() {
               variant={decisionModal.status === 'approved' ? 'primary' : 'danger'}
               loading={decisionLoading}
             >
-              Confirm {decisionModal.status === 'approved' ? 'Approval' : 'Rejection'}
+              Confirm {decisionModal.status === 'approved' ? 'approval' : 'rejection'}
             </Button>
           </div>
         </form>

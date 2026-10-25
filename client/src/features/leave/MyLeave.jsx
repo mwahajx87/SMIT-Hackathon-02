@@ -110,74 +110,40 @@ export function MyLeave() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2A44]">My Leave</h1>
-          <p className="text-sm text-[#6B7385]">Manage your leave balance, applications, and history</p>
+          <h1 className="text-2xl font-semibold text-[var(--text)] leading-8">My leave</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">Manage your leave balance, applications, and history.</p>
         </div>
-        <Button onClick={() => setShowApplyModal(true)} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          <span>Apply for Leave</span>
+        <Button onClick={() => setShowApplyModal(true)} size="sm" className="flex items-center gap-1.5 h-9">
+          <Plus className="w-4 h-4 stroke-[1.75]" />
+          <span>Apply for leave</span>
         </Button>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-[var(--danger)] text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 stroke-[1.75]" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Smart Leave AI Input Box */}
-      <Card className="p-4 bg-gradient-to-r from-[#5B4FCF]/5 to-transparent border border-[#5B4FCF]/20">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-[#5B4FCF] flex items-center justify-center text-white">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-[#1F2A44] block">Smart AI Leave Application</span>
-              <span className="text-[11px] text-[#6B7385]">Type naturally (e.g. "Next Monday and Tuesday for personal work")</span>
-            </div>
-          </div>
+      {/* Smart Leave AI Input Box per Section 5 */}
+      <div className="p-4 bg-[var(--surface)] rounded-xl border border-[var(--ai)]/30 space-y-3 transition-colors">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-[var(--ai)] flex items-center gap-1.5">
+            <span>✦ Describe your leave in your own words</span>
+          </span>
+        </div>
 
-          <div className="flex-1 flex gap-2">
-            <input
-              type="text"
-              value={smartText}
-              onChange={(e) => setSmartText(e.target.value)}
-              placeholder="e.g. Taking annual leave from next Wednesday to Friday for my sister's wedding"
-              className="flex-1 px-3 py-1.5 border border-[#E3E7EE] rounded-lg text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#5B4FCF]"
-              onKeyDown={async (e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  if (!smartText.trim() || parsingSmart) return;
-                  setParsingSmart(true);
-                  try {
-                    const res = await apiRequest('/ai/smart-leave', {
-                      method: 'POST',
-                      body: JSON.stringify({ text: smartText })
-                    });
-                    if (res?.fallback || !res?.data) {
-                      setShowApplyModal(true);
-                    } else {
-                      setLeaveType(res.data.leaveType);
-                      setStartDate(res.data.startDate);
-                      setEndDate(res.data.endDate);
-                      setReason(res.data.reason);
-                      setIsAiSuggested(true);
-                      setShowApplyModal(true);
-                    }
-                  } catch (err) {
-                    setShowApplyModal(true);
-                  } finally {
-                    setParsingSmart(false);
-                  }
-                }
-              }}
-            />
-            <Button
-              size="sm"
-              disabled={parsingSmart || !smartText.trim()}
-              onClick={async () => {
+        <div className="flex flex-col sm:flex-row gap-2.5">
+          <input
+            type="text"
+            value={smartText}
+            onChange={(e) => setSmartText(e.target.value)}
+            placeholder="e.g. Need next Monday and Tuesday off for my sister's wedding"
+            className="flex-1 px-3 py-2 border border-[var(--border)] rounded-lg text-xs bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--ai)]"
+            onKeyDown={async (e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
                 if (!smartText.trim() || parsingSmart) return;
                 setParsingSmart(true);
                 try {
@@ -200,15 +166,43 @@ export function MyLeave() {
                 } finally {
                   setParsingSmart(false);
                 }
-              }}
-              className="bg-[#5B4FCF] hover:bg-[#4A3EB5] text-white text-xs shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 mr-1" />
-              <span>{parsingSmart ? 'Analyzing...' : 'Parse with AI'}</span>
-            </Button>
-          </div>
+              }
+            }}
+          />
+          <Button
+            size="sm"
+            variant="ai"
+            disabled={parsingSmart || !smartText.trim()}
+            onClick={async () => {
+              if (!smartText.trim() || parsingSmart) return;
+              setParsingSmart(true);
+              try {
+                const res = await apiRequest('/ai/smart-leave', {
+                  method: 'POST',
+                  body: JSON.stringify({ text: smartText })
+                });
+                if (res?.fallback || !res?.data) {
+                  setShowApplyModal(true);
+                } else {
+                  setLeaveType(res.data.leaveType);
+                  setStartDate(res.data.startDate);
+                  setEndDate(res.data.endDate);
+                  setReason(res.data.reason);
+                  setIsAiSuggested(true);
+                  setShowApplyModal(true);
+                }
+              } catch (err) {
+                setShowApplyModal(true);
+              } finally {
+                setParsingSmart(false);
+              }
+            }}
+            className="h-9 px-3.5 text-xs shrink-0"
+          >
+            <span>{parsingSmart ? '✦ Filling...' : 'Fill the form ✦'}</span>
+          </Button>
         </div>
-      </Card>
+      </div>
 
       {/* Balance Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -221,22 +215,22 @@ export function MyLeave() {
               </Card>
             ))
           : balances.map((bal) => (
-              <Card key={bal.leaveType} className="p-5 border-l-4 border-l-[#12A087]">
-                <div className="flex items-center justify-between text-xs text-[#6B7385] font-semibold uppercase">
+              <Card key={bal.leaveType} className="p-5 border-l-4 border-l-[var(--primary)]">
+                <div className="flex items-center justify-between text-xs text-[var(--text-muted)] font-medium">
                   <span>{bal.name}</span>
-                  <Calendar className="w-4 h-4 text-[#12A087]" />
+                  <Calendar className="w-4 h-4 text-[var(--primary)]" />
                 </div>
                 <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold text-[#1F2A44]">
+                  <span className="text-3xl font-semibold text-[var(--text)] tabular-nums">
                     {bal.available === null ? '∞' : bal.available}
                   </span>
-                  <span className="text-xs text-[#6B7385]">
+                  <span className="text-xs text-[var(--text-muted)]">
                     {bal.quota === null ? 'unlimited' : `left of ${bal.quota}d`}
                   </span>
                 </div>
-                <div className="mt-3 text-xs text-[#6B7385] flex justify-between border-t border-[#E3E7EE] pt-2">
-                  <span>Approved: <strong>{bal.approved}d</strong></span>
-                  <span>Pending: <strong>{bal.pending}d</strong></span>
+                <div className="mt-3 text-xs text-[var(--text-muted)] flex justify-between border-t border-[var(--border)] pt-2">
+                  <span>Approved: <strong className="text-[var(--text)] tabular-nums">{bal.approved}d</strong></span>
+                  <span>Pending: <strong className="text-[var(--text)] tabular-nums">{bal.pending}d</strong></span>
                 </div>
               </Card>
             ))}
@@ -244,8 +238,8 @@ export function MyLeave() {
 
       {/* Leave Application History */}
       <Card className="overflow-hidden">
-        <div className="p-4 border-b border-[#E3E7EE]">
-          <h2 className="text-base font-bold text-[#1F2A44]">Leave History</h2>
+        <div className="p-4 border-b border-[var(--border)]">
+          <h2 className="text-sm font-semibold text-[var(--text)]">Leave history</h2>
         </div>
 
         {loading ? (
@@ -264,35 +258,35 @@ export function MyLeave() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-[#F8FAFC] text-[#6B7385] text-xs uppercase font-medium border-b border-[#E3E7EE]">
+              <thead className="bg-[var(--surface-muted)] text-[var(--text-muted)] text-xs font-medium border-b border-[var(--border)]">
                 <tr>
                   <th className="px-5 py-3">Type</th>
                   <th className="px-5 py-3">Dates</th>
-                  <th className="px-5 py-3">Working Days</th>
+                  <th className="px-5 py-3">Working days</th>
                   <th className="px-5 py-3">Reason</th>
                   <th className="px-5 py-3">Status</th>
                   <th className="px-5 py-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E3E7EE]">
+              <tbody className="divide-y divide-[var(--border)]">
                 {history.map((req) => (
-                  <tr key={req._id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-5 py-4 font-medium text-[#1F2A44] capitalize">
+                  <tr key={req._id} className="hover:bg-[var(--surface-muted)]/50 transition-colors">
+                    <td className="px-5 py-4 font-medium text-[var(--text)] capitalize">
                       {req.leaveType}
                     </td>
-                    <td className="px-5 py-4 text-[#1F2A44] whitespace-nowrap">
+                    <td className="px-5 py-4 text-[var(--text)] whitespace-nowrap font-mono tabular-nums text-xs">
                       {req.startDate} → {req.endDate}
                     </td>
-                    <td className="px-5 py-4 text-[#1F2A44] font-semibold">
+                    <td className="px-5 py-4 text-[var(--text)] font-mono tabular-nums text-xs">
                       {req.workingDays} {req.workingDays === 1 ? 'day' : 'days'}
                     </td>
-                    <td className="px-5 py-4 text-[#6B7385] max-w-xs truncate" title={req.reason}>
+                    <td className="px-5 py-4 text-[var(--text-muted)] max-w-xs truncate" title={req.reason}>
                       {req.reason}
                     </td>
                     <td className="px-5 py-4">
                       <StatusBadge status={req.status} />
                       {req.decisionComment && (
-                        <p className="text-[11px] text-[#6B7385] mt-1 italic">
+                        <p className="text-[11px] text-[var(--text-muted)] mt-1 italic">
                           "{req.decisionComment}"
                         </p>
                       )}
@@ -303,7 +297,7 @@ export function MyLeave() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleCancel(req._id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs px-2 py-1"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs px-2 py-1"
                         >
                           <XCircle className="w-3.5 h-3.5 mr-1" />
                           Cancel
@@ -322,52 +316,52 @@ export function MyLeave() {
       <Modal
         isOpen={showApplyModal}
         onClose={() => setShowApplyModal(false)}
-        title="Apply for Leave"
+        title="Apply for leave"
       >
         <form onSubmit={handleApply} className="space-y-4">
           {formError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded text-red-600 text-xs">
+            <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded text-red-600 dark:text-red-400 text-xs">
               {formError}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-[#1F2A44] uppercase mb-1">
-              Leave Type
+            <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">
+              Leave type
             </label>
             <select
               value={leaveType}
               onChange={(e) => setLeaveType(e.target.value)}
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
             >
-              <option value="annual">Annual Leave</option>
-              <option value="sick">Sick Leave</option>
-              <option value="casual">Casual Leave</option>
-              <option value="unpaid">Unpaid Leave</option>
+              <option value="annual">Annual leave</option>
+              <option value="sick">Sick leave</option>
+              <option value="casual">Casual leave</option>
+              <option value="unpaid">Unpaid leave</option>
             </select>
             {selectedBalance && (
-              <p className="text-xs text-[#6B7385] mt-1">
-                Available balance: <strong>{selectedBalance.available === null ? 'Unlimited' : `${selectedBalance.available} days`}</strong>
+              <p className="text-xs text-[var(--text-muted)] mt-1">
+                Available balance: <strong className="text-[var(--text)] tabular-nums">{selectedBalance.available === null ? 'Unlimited' : `${selectedBalance.available} days`}</strong>
               </p>
             )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#1F2A44] uppercase mb-1">
-                Start Date
+              <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">
+                Start date
               </label>
               <input
                 type="date"
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#1F2A44] uppercase mb-1">
-                End Date
+              <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">
+                End date
               </label>
               <input
                 type="date"
@@ -375,25 +369,25 @@ export function MyLeave() {
                 value={endDate}
                 min={startDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </div>
           </div>
 
           {startDate && endDate && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between text-xs text-blue-900">
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 rounded-lg flex items-center justify-between text-xs text-blue-900 dark:text-blue-300">
               <span className="flex items-center gap-1.5 font-medium">
-                <Clock className="w-4 h-4 text-blue-600" />
-                Estimated Working Days:
+                <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                Estimated working days:
               </span>
-              <span className="font-bold text-sm bg-blue-200/60 px-2 py-0.5 rounded">
+              <span className="font-semibold text-sm tabular-nums bg-blue-200/60 dark:bg-blue-800/40 px-2 py-0.5 rounded">
                 {estimatedDays} {estimatedDays === 1 ? 'day' : 'days'}
               </span>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-[#1F2A44] uppercase mb-1">
+            <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">
               Reason
             </label>
             <textarea
@@ -402,14 +396,14 @@ export function MyLeave() {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="State the reason for taking leave..."
-              className="w-full px-3 py-2 border border-[#E3E7EE] rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] placeholder:text-[var(--text-muted)]"
             />
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={() => setShowApplyModal(false)}
               disabled={submitting}
             >
@@ -419,7 +413,7 @@ export function MyLeave() {
               type="submit"
               disabled={submitting || (startDate && endDate && estimatedDays < 1)}
             >
-              {submitting ? 'Submitting...' : 'Submit Application'}
+              {submitting ? 'Submitting...' : 'Submit application'}
             </Button>
           </div>
         </form>
