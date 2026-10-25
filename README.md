@@ -129,8 +129,6 @@ Guardrails: key on server only · tools reuse the same services and permission c
 ```
 hcm-lite/
 ├─ README.md
-├─ .env.example
-├─ docs/        prd.md · architecture.md · design.md · rules.md · tasks.md
 ├─ server/      Express API (routes → controller → service → model)
 └─ client/      React web app
 ```
@@ -154,11 +152,11 @@ hcm-lite/
 - _list here_
 
 **Bonus attempted**
-- [ ] Camera attendance (face + location)
-- [ ] Late penalty rule
-- [ ] Attrition risk / anomaly flags
-- [ ] Roman Urdu in AI
-- [ ] Dark mode / PWA
+- [x] Camera attendance (face + location)
+- [x] Late penalty rule
+- [x] Attrition risk / anomaly flags
+- [x] Roman Urdu in AI
+- [x] Dark mode / PWA
 
 ## Security notes
 
@@ -167,7 +165,3 @@ hcm-lite/
 - Audit log is append-only (no edit/delete path).
 - Finalized payroll is locked on the server.
 - Only `.env.example` is committed; never commit real keys or database passwords.
-
-## Submission
-
-Submit on the Saylani LMS (`https://lms.saylaniit.com/`) from your own portal with two links: the **Git repository** (public or shared with judges) and the **hosted project** (opens on first-run setup).
