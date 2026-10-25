@@ -22,8 +22,22 @@ export function createApp() {
 
   // Security & parsing
   app.use(helmet());
+  const allowedOrigins = env.CLIENT_URL
+    ? env.CLIENT_URL.split(',').map((o) => o.trim())
+    : [];
+
   app.use(cors({
-    origin: env.CLIENT_URL ? env.CLIENT_URL.split(',') : '*',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (curl, mobile apps, server-to-server)
+      if (!origin) return callback(null, true);
+      // If a specific allow-list is configured, enforce it
+      if (allowedOrigins.length > 0) {
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error(`CORS: origin ${origin} not allowed`));
+      }
+      // No allow-list configured → permit every origin (development / open API)
+      return callback(null, true);
+    },
     credentials: true
   }));
   app.use(express.json({ limit: '2mb' }));
