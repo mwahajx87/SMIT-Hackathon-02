@@ -99,7 +99,7 @@ function InitialRouteCheck({ children }) {
 
   if (checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="h-[80vh] flex items-center justify-center">
         <span className="text-sm text-[#6B7385]">Loading HCM Lite...</span>
       </div>
     );

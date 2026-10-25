@@ -247,7 +247,7 @@ export function AppShell() {
 
         {/* Mobile menu drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden sticky bg-[var(--surface)] border-b border-[var(--border)] p-4 space-y-1 transition-colors">
+          <div className="md:hidden fixed w-full z-10 bg-[var(--surface)] border-b border-[var(--border)] p-4 space-y-1 transition-colors">
             {navLinks.map((item) => {
               const Icon = item.icon;
               return (
@@ -278,8 +278,12 @@ export function AppShell() {
         )}
 
         {/* Page Content Outlet (Centered, max-width 1200 px) */}
-        <main className="flex-1 p-6 md:p-8 max-w-[1200px] w-full mx-auto">
-          <Outlet />
+        <main
+          className="flex-1 p-6 md:p-8 max-w-[1200px] w-full mx-auto"
+            >
+              <Outlet
+              onclick = {() => setMobileMenuOpen(false)}
+             />
         </main>
 
         {/* AI Assistant Slide-over Drawer */}

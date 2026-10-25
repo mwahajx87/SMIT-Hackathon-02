@@ -51,7 +51,7 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] flex flex-col justify-center items-center px-4 py-12 transition-colors">
+    <div className="h-[80vh] bg-[var(--bg)] flex flex-col justify-center items-center px-4 py-12 transition-colors">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
           <div className="w-10 h-10 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold mx-auto mb-3 select-none shadow-sm">
