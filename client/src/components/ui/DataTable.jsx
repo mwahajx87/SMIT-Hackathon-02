@@ -28,22 +28,30 @@ export function DataTable({
   }
 
   return (
-    <div className={`overflow-x-auto rounded-xl border border-[#E3E7EE] bg-white ${className}`}>
-      <table className="min-w-full divide-y divide-[#E3E7EE] text-left text-sm">
-        <thead className="bg-gray-50 text-xs font-semibold text-[#6B7385] uppercase tracking-wider">
+    <div className={`overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--surface)] transition-colors ${className}`}>
+      <table className="min-w-full divide-y divide-[var(--border)] text-left text-sm">
+        <thead className="bg-[var(--bg)] text-xs font-medium text-[var(--text-muted)]">
           <tr>
             {columns.map((col, idx) => (
-              <th key={idx} className="px-4 py-3.5">
+              <th 
+                key={idx} 
+                className={`px-4 py-3 font-medium text-[var(--text-muted)] ${col.align === 'right' ? 'text-right' : 'text-left'}`}
+              >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#E3E7EE] text-[#1F2A44]">
+        <tbody className="divide-y divide-[var(--border)] text-[var(--text)]">
           {data.map((row, rowIdx) => (
-            <tr key={row._id || rowIdx} className="hover:bg-gray-50/75 transition-colors">
+            <tr key={row._id || rowIdx} className="h-12 hover:bg-[var(--bg)] transition-colors">
               {columns.map((col, colIdx) => (
-                <td key={colIdx} className="px-4 py-3.5 whitespace-nowrap">
+                <td 
+                  key={colIdx} 
+                  className={`px-4 py-3 whitespace-nowrap text-sm text-[var(--text)] ${
+                    col.align === 'right' || typeof row[col.accessorKey] === 'number' ? 'text-right tabular-nums' : 'text-left'
+                  }`}
+                >
                   {col.cell ? col.cell(row) : (row[col.accessorKey] ?? '-')}
                 </td>
               ))}
@@ -54,3 +62,4 @@ export function DataTable({
     </div>
   );
 }
+

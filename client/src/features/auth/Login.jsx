@@ -28,24 +28,27 @@ export function Login() {
         navigate('/');
       }
     } catch (err) {
-      setError(err.message || 'Failed to login');
+      setError(err.message || 'Failed to sign in. Please verify your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-[#1F2A44] tracking-tight">HCM Lite</h1>
-          <p className="text-sm text-[#6B7385] mt-1">Sign in to your Human Capital Management account</p>
+    <div className="min-h-screen bg-[var(--bg)] flex flex-col justify-center items-center px-4 py-12 transition-colors">
+      <div className="w-full max-w-md space-y-6">
+        <div className="text-center">
+          <div className="w-10 h-10 rounded-lg bg-[#0E8F7A] text-white flex items-center justify-center font-bold mx-auto mb-3 select-none">
+            ▣
+          </div>
+          <h1 className="text-2xl font-semibold text-[var(--text)] tracking-tight">HCM Lite</h1>
+          <p className="text-xs text-[var(--text-muted)] mt-1">Sign in to your account</p>
         </div>
 
         <Card>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 bg-[#D64545]/10 border border-[#D64545]/20 rounded-lg text-xs text-[#D64545] font-medium">
+              <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-xs text-[var(--danger)] font-normal">
                 {error}
               </div>
             )}
@@ -58,9 +61,9 @@ export function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="name@company.com"
-                  className="w-full pl-9 pr-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                  className="w-full pl-9 pr-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[#0E8F7A]"
                 />
-                <Mail className="w-4 h-4 text-[#6B7385] absolute left-3 top-2.5" />
+                <Mail className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-2.5 stroke-[1.75]" />
               </div>
             </FormField>
 
@@ -72,14 +75,14 @@ export function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-9 pr-3 py-2 border border-[#E3E7EE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#12A087]"
+                  className="w-full pl-9 pr-3 py-2 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-[#0E8F7A]"
                 />
-                <Lock className="w-4 h-4 text-[#6B7385] absolute left-3 top-2.5" />
+                <Lock className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-2.5 stroke-[1.75]" />
               </div>
             </FormField>
 
-            <Button type="submit" loading={loading} className="w-full">
-              Sign In
+            <Button type="submit" loading={loading} className="w-full h-10 mt-2">
+              Sign in
             </Button>
           </form>
         </Card>
@@ -87,3 +90,4 @@ export function Login() {
     </div>
   );
 }
+

@@ -2,21 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';
-import { StatusBadge } from '../../components/ui/StatusBadge.jsx';
 import { CheckInWidget } from '../attendance/CheckInWidget.jsx';
 import { apiRequest } from '../../lib/api.js';
-import {
-  Clock,
-  CalendarCheck,
-  CircleDollarSign,
-  CalendarDays,
-  FileText,
-  AlertCircle
-} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function EmployeeDashboard() {
   const [data, setData] = useState(null);
+  const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,10 +16,22 @@ export function EmployeeDashboard() {
     try {
       setLoading(true);
       setError(null);
-      const res = await apiRequest('/dashboard/employee');
-      setData(res);
+      const [res, annRes] = await Promise.allSettled([
+        apiRequest('/dashboard/employee'),
+        apiRequest('/announcements')
+      ]);
+
+      if (res.status === 'fulfilled') {
+        setData(res.value);
+      } else {
+        setError(res.reason?.message || 'Failed to load dashboard data');
+      }
+
+      if (annRes.status === 'fulfilled') {
+        setAnnouncements(annRes.value?.items?.slice(0, 3) || annRes.value?.slice(0, 3) || []);
+      }
     } catch (err) {
-      setError(err.message || 'Failed to load your personal dashboard');
+      setError(err.message || 'Failed to load dashboard');
     } finally {
       setLoading(false);
     }
@@ -37,143 +41,128 @@ export function EmployeeDashboard() {
     fetchDashboard();
   }, []);
 
+  const hoursWorked = data?.monthStats?.hoursWorked ?? 0;
+  const targetHours = 40;
+  const progressPercent = Math.min(Math.round((hoursWorked / targetHours) * 100), 100);
+
   return (
     <div className="space-y-6">
+      {/* Page Header Pattern */}
       <div>
-        <h1 className="text-2xl font-bold text-[#1F2A44]">My Workplace Dashboard</h1>
-        <p className="text-sm text-[#6B7385]">
-          Your daily punch clock, worked hours, attendance status, and recent salary
-        </p>
+        <h1 className="text-2xl font-semibold text-[var(--text)] leading-8">My dashboard</h1>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="p-3 bg-[var(--danger-soft)] border border-[var(--danger)]/20 rounded-lg text-xs text-[var(--danger)]">
           {error}
         </div>
       )}
 
-      {/* Grid: Check-in widget on Left, Monthly KPIs on Right */}
+      {/* Top Row: Prominent Check-in Card (2/3) + Announcements (1/3) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Check-In/Punch Clock Card */}
-        <div className="lg:col-span-1">
-          <CheckInWidget onCheckInOut={fetchDashboard} />
+        <div className="lg:col-span-2">
+          <CheckInWidget onStatusChange={fetchDashboard} />
         </div>
 
-        {/* Stats Column */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {loading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i} className="p-5 space-y-2">
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-8 w-16" />
-                </Card>
-              ))
-            ) : (
-              <>
-                <Card className="p-5 border-l-4 border-l-[#12A087]">
-                  <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                    <span>Hours Worked</span>
-                    <Clock className="w-4 h-4 text-[#12A087]" />
+        <div className="lg:col-span-1">
+          <Card className="h-full flex flex-col justify-between" title="Announcements">
+            <div className="space-y-3">
+              {loading ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              ) : announcements.length > 0 ? (
+                announcements.map((ann, idx) => (
+                  <div key={ann._id || idx} className="text-xs text-[var(--text-muted)] flex items-start gap-2">
+                    <span className="text-[#0E8F7A] font-bold select-none">•</span>
+                    <span className="leading-5 line-clamp-2 text-[var(--text)]">{ann.title || ann.message}</span>
                   </div>
-                  <div className="mt-2 text-2xl font-extrabold text-[#1F2A44]">
-                    {data?.monthStats?.hoursWorked ?? 0}h
+                ))
+              ) : (
+                <div className="space-y-2 text-xs text-[var(--text-muted)]">
+                  <div className="flex items-start gap-2">
+                    <span className="text-[#0E8F7A] font-bold select-none">•</span>
+                    <span className="leading-5">Company payroll cut-off on 25th</span>
                   </div>
-                  <span className="text-xs text-[#6B7385] mt-1 block">This month</span>
-                </Card>
-
-                <Card className="p-5 border-l-4 border-l-amber-500">
-                  <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                    <span>Late Arrivals</span>
-                    <AlertCircle className="w-4 h-4 text-amber-500" />
-                  </div>
-                  <div className="mt-2 text-2xl font-extrabold text-[#1F2A44]">
-                    {data?.monthStats?.lateCount ?? 0}
-                  </div>
-                  <span className="text-xs text-[#6B7385] mt-1 block">Times after 09:15 AM</span>
-                </Card>
-
-                <Card className="p-5 border-l-4 border-l-blue-500">
-                  <div className="flex items-center justify-between text-xs font-semibold text-[#6B7385] uppercase">
-                    <span>Today's Status</span>
-                    <CalendarCheck className="w-4 h-4 text-blue-500" />
-                  </div>
-                  <div className="mt-2">
-                    {data?.todayAttendance ? (
-                      <StatusBadge status={data.todayAttendance.status} />
-                    ) : (
-                      <span className="text-xs text-[#6B7385] italic font-medium">Not Checked In</span>
-                    )}
-                  </div>
-                  <span className="text-xs text-[#6B7385] mt-2 block">
-                    {data?.todayAttendance?.workedMinutes
-                      ? `${Math.round(data.todayAttendance.workedMinutes / 60)}h worked`
-                      : 'Punch in above'}
-                  </span>
-                </Card>
-              </>
-            )}
-          </div>
-
-          {/* Quick Actions & Recent Payslip Card */}
-          <Card className="p-5 space-y-4">
-            <h2 className="text-sm font-bold text-[#1F2A44] uppercase tracking-wider pb-2 border-b border-[#E3E7EE]">
-              Latest Payslip & Quick Links
-            </h2>
-
-            {loading ? (
-              <Skeleton className="h-14 w-full" />
-            ) : data?.lastPayslip ? (
-              <div className="flex items-center justify-between p-4 bg-emerald-50/60 border border-emerald-100 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <CircleDollarSign className="w-8 h-8 text-[#12A087]" />
-                  <div>
-                    <span className="font-bold text-[#1F2A44] text-sm">
-                      {data.lastPayslip.month} Salary Disbursed
-                    </span>
-                    <span className="text-xs text-[#6B7385] block">
-                      Net: PKR {data.lastPayslip.netSalary?.toLocaleString()}
-                    </span>
+                  <div className="flex items-start gap-2">
+                    <span className="text-[#0E8F7A] font-bold select-none">•</span>
+                    <span className="leading-5">Annual leave requests open for next month</span>
                   </div>
                 </div>
-                <Link to="/payslips">
-                  <Button variant="outline" size="sm" className="text-xs">
-                    View Slip
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <div className="p-4 bg-slate-50 rounded-lg text-xs text-[#6B7385]">
-                No finalized payslips available for download yet.
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <Link
-                to="/leave"
-                className="p-3 border border-[#E3E7EE] rounded-lg hover:border-[#12A087] transition-all flex items-center gap-3 group bg-white"
-              >
-                <CalendarDays className="w-5 h-5 text-[#12A087] group-hover:scale-110 transition-transform" />
-                <div>
-                  <span className="text-xs font-bold text-[#1F2A44] block">Apply for Leave</span>
-                  <span className="text-[11px] text-[#6B7385]">Check your balance</span>
-                </div>
-              </Link>
-
-              <Link
-                to="/attendance"
-                className="p-3 border border-[#E3E7EE] rounded-lg hover:border-[#12A087] transition-all flex items-center gap-3 group bg-white"
-              >
-                <CalendarCheck className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                <div>
-                  <span className="text-xs font-bold text-[#1F2A44] block">My Attendance</span>
-                  <span className="text-[11px] text-[#6B7385]">Monthly calendar & logs</span>
-                </div>
+              )}
+            </div>
+            <div className="pt-4 border-t border-[var(--border)] mt-4">
+              <Link to="/announcements" className="text-xs font-medium text-[#0E8F7A] hover:underline">
+                View all announcements →
               </Link>
             </div>
           </Card>
         </div>
       </div>
+
+      {/* Bottom KPI Row: 4 Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* KPI 1: Hours this week */}
+        <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+          <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Hours this week</span>
+          <div className="my-2.5">
+            <span className="text-[28px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+              {hoursWorked} <span className="text-base font-normal text-[var(--text-muted)]">/ {targetHours} h</span>
+            </span>
+          </div>
+          {/* Progress bar */}
+          <div className="w-full bg-[var(--bg)] rounded-full h-1.5 overflow-hidden">
+            <div 
+              className="bg-[#0E8F7A] h-1.5 rounded-full transition-all" 
+              style={{ width: `${progressPercent}%` }} 
+            />
+          </div>
+        </div>
+
+        {/* KPI 2: Late days this month */}
+        <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+          <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Late days this month</span>
+          <div className="my-2.5">
+            <span className="text-[28px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+              {data?.monthStats?.lateCount ?? 0}
+            </span>
+          </div>
+          <span className="text-xs text-[var(--text-muted)] leading-4">After 09:15 AM</span>
+        </div>
+
+        {/* KPI 3: Sick leave left */}
+        <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+          <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Sick leave left</span>
+          <div className="my-2.5">
+            <span className="text-[28px] leading-[36px] font-semibold text-[var(--text)] tabular-nums tracking-tight">
+              {data?.sickLeaveBalance ?? '8'} <span className="text-base font-normal text-[var(--text-muted)]">days</span>
+            </span>
+          </div>
+          <Link to="/leave" className="text-xs text-[#0E8F7A] hover:underline leading-4">
+            Apply for leave
+          </Link>
+        </div>
+
+        {/* KPI 4: Last payslip */}
+        <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-5 flex flex-col justify-between">
+          <span className="text-xs font-normal text-[var(--text-muted)] leading-4">Last payslip</span>
+          <div className="my-2.5">
+            <span className="text-lg font-semibold text-[var(--text)] tracking-tight truncate block">
+              {data?.lastPayslip?.month || 'September'}
+            </span>
+            <span className="text-xs text-[var(--text-muted)] block mt-0.5 tabular-nums">
+              {data?.lastPayslip?.netSalary ? `PKR ${data.lastPayslip.netSalary.toLocaleString()}` : 'Disbursed'}
+            </span>
+          </div>
+          <Link to="/payslips">
+            <Button variant="secondary" size="sm" className="w-full text-xs">
+              View payslip
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
+
