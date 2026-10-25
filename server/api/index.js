@@ -24,5 +24,10 @@ export default async function handler(req, res) {
     appInstance = createApp();
   }
 
+  // Normalize URL when rewritten by Vercel
+  if (req.url.startsWith('/api/index.js')) {
+    req.url = req.url.replace('/api/index.js', '') || '/';
+  }
+
   return appInstance(req, res);
 }

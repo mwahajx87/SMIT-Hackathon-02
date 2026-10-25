@@ -28,7 +28,18 @@ export function createApp() {
   }));
   app.use(express.json({ limit: '2mb' }));
 
-  // Health endpoint
+  // Root & Health endpoints
+  app.get('/', (req, res) => {
+    res.json({
+      name: 'HCM Lite Backend API',
+      status: 'active',
+      endpoints: {
+        health: '/api/health',
+        setupStatus: '/api/setup/status'
+      }
+    });
+  });
+
   app.get('/api/health', (req, res) => {
     res.json({
       data: {
